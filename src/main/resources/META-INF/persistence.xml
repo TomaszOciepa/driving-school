@@ -6,18 +6,12 @@
 
     <persistence-unit name="phpmyadmin" transaction-type="JTA">
         <jta-data-source>java:ds/phpmyadmin</jta-data-source>
-        <!--<class>com.infoshareacademy.jbusters.model.User</class>-->
-        <!--<class>com.infoshareacademy.jbusters.model.NewTransaction</class>-->
-        <!--<class>com.infoshareacademy.jbusters.model.Configuration</class>-->
-        <!--<class>com.infoshareacademy.jbusters.model.Tranzaction</class>-->
-        <!--<class>com.infoshareacademy.jbusters.model.DistrictWage</class>-->
-        <!--<class>com.infoshareacademy.jbusters.model.Suggestions</class>-->
         <properties>
             <!-- Hibernate settings -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>
 
