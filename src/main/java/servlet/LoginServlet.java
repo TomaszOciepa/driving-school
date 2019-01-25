@@ -46,9 +46,13 @@ public class LoginServlet extends HttpServlet {
     @Inject
     private StudentDao studentDao;
 
-    CheckExists checkExists = new CheckExists();
-    CheckPassword checkPassword = new CheckPassword();
-    DownloadUserToDatabase downloadUserToDatabase = new DownloadUserToDatabase();
+    @Inject
+    private CheckExists checkExists;
+    @Inject
+    private CheckPassword checkPassword;
+    @Inject
+    private DownloadUserToDatabase downloadUserToDatabase;
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -63,15 +67,17 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         if (!email.isEmpty() && !password.isEmpty()) {
-
+            LOG.info("mail nie jest pusty");
             if (checkExists.checkManagerExists(email)) {
-
+                LOG.info("sprawdzam czy istnieje");
                 if (checkPassword.checkManagerPassword(email, password)){
+                    LOG.info("Sprawdzam hasło");
                     session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadManager(email).getManagerEmail());
                     session.setAttribute(SESSION_ATTRIBUTE_NAME, downloadUserToDatabase.downloadManager(email).getManagerName());
                     session.setAttribute(SESSION_ATTRIBUTE_LASTNAME, downloadUserToDatabase.downloadManager(email).getManagerLastname());
 
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MANAGER);
+                    LOG.info("ustawiłem template");
                     model.put("sessionEmail", downloadUserToDatabase.downloadManager(email).getManagerEmail());
                     model.put("sessionName", downloadUserToDatabase.downloadManager(email).getManagerName());
                     model.put("sessionLastname", downloadUserToDatabase.downloadManager(email).getManagerLastname());
@@ -85,6 +91,7 @@ public class LoginServlet extends HttpServlet {
     private void showTemplate(Template template, Map<String, Object> model, PrintWriter writer){
         try {
             template.process(model, writer);
+            LOG.info("zalogowany");
         } catch (TemplateException e) {
             e.printStackTrace();
         } catch (IOException e) {
