@@ -2,8 +2,10 @@ package authentication;
 
 import date.dao.InstructorDao;
 import date.dao.ManagerDao;
+import date.dao.StudentDao;
 import date.model.Instructor;
 import date.model.Manager;
+import date.model.Student;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -17,6 +19,8 @@ public class CheckExists {
     private ManagerDao managerDao;
     @Inject
     private InstructorDao instructorDao;
+    @Inject
+    private StudentDao studentDao;
 
     public boolean checkManagerExists(String email) {
 
@@ -46,7 +50,18 @@ public class CheckExists {
         }
     }
 
-    
+    public boolean checkStudentExists(String email) {
+        List<Student> studentList = studentDao.findAll();
+        List<Student> studentsEmail = studentList.stream()
+                .filter(s -> s.getStudentEmail().equals(email))
+                .collect(Collectors.toList());
+
+        if (!studentsEmail.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 }

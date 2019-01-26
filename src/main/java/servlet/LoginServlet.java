@@ -93,8 +93,8 @@ public class LoginServlet extends HttpServlet {
                 LOG.info("LoginServlet.java: Check exists Instructor email");
                 if (checkPassword.checkInstructorPassword(email, password)) {
                     LOG.info("Check exists Instructor password");
-                    session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
 
+                    session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_INSTRUCTOR);
                     LOG.info("LoginServlet.java: Loaded template instructor");
 
@@ -102,6 +102,23 @@ public class LoginServlet extends HttpServlet {
                     showTemplate(template, model, writer);
                 } else {
                     LOG.warn("LoginServlet.java: Failed password Instructor");
+                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
+                    showTemplate(template, model, writer);
+                }
+            } else if (checkExists.checkStudentExists(email)) {
+                LOG.info("LoginServlet.java: Check exists Student email");
+                if (checkPassword.checkStudentPassword(email, password)) {
+                    LOG.info("Check exists Student password");
+
+                    session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadStudent(email).getStudentEmail());
+                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_STUDENT);
+                    LOG.info("LoginServlet.java: Loaded template student");
+
+                    model.put("sessionEmail", downloadUserToDatabase.downloadStudent(email).getStudentEmail());
+                    showTemplate(template, model, writer);
+
+                } else {
+                    LOG.warn("LoginServlet.java: Failed password Student");
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
                     showTemplate(template, model, writer);
                 }
