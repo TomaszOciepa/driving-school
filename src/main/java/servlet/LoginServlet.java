@@ -3,10 +3,6 @@ package servlet;
 import authentication.CheckExists;
 import authentication.CheckPassword;
 import authentication.DownloadUserToDatabase;
-import date.dao.InstructorDao;
-import date.dao.ManagerDao;
-import date.dao.StudentDao;
-import date.model.Manager;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -40,19 +36,13 @@ public class LoginServlet extends HttpServlet {
     @Inject
     private TemplateProvider templateProvider;
     @Inject
-    private ManagerDao managerDao;
-    @Inject
-    private InstructorDao instructorDao;
-    @Inject
-    private StudentDao studentDao;
-
-    @Inject
     private CheckExists checkExists;
     @Inject
     private CheckPassword checkPassword;
     @Inject
     private DownloadUserToDatabase downloadUserToDatabase;
 
+    Template template;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -60,7 +50,7 @@ public class LoginServlet extends HttpServlet {
         resp.setContentType("text/html;charset=UTF-8");
         final PrintWriter writer = resp.getWriter();
         HttpSession session = req.getSession(true);
-        Template template;
+
         Map<String, Object> model = new HashMap<>();
 
         String email = req.getParameter("email");
@@ -86,8 +76,7 @@ public class LoginServlet extends HttpServlet {
                     showTemplate(template, model, writer);
                 } else {
                     LOG.warn("LoginServlet.java: Failed password Manager");
-                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
-                    showTemplate(template, model, writer);
+                    loadFailedTemplate(writer, model);
                 }
             } else if (checkExists.checkInstructorExists(email)) {
                 LOG.info("LoginServlet.java: Check exists Instructor email");
@@ -95,15 +84,19 @@ public class LoginServlet extends HttpServlet {
                     LOG.info("Check exists Instructor password");
 
                     session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
+                    session.setAttribute(SESSION_ATTRIBUTE_NAME, downloadUserToDatabase.downloadInstructor(email).getInstructorName());
+                    session.setAttribute(SESSION_ATTRIBUTE_LASTNAME, downloadUserToDatabase.downloadInstructor(email).getInstructorLastname());
+
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_INSTRUCTOR);
                     LOG.info("LoginServlet.java: Loaded template instructor");
 
                     model.put("sessionEmail", downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
+                    model.put("sessionName", downloadUserToDatabase.downloadInstructor(email).getInstructorName());
+                    model.put("sessionLastname", downloadUserToDatabase.downloadInstructor(email).getInstructorLastname());
                     showTemplate(template, model, writer);
                 } else {
                     LOG.warn("LoginServlet.java: Failed password Instructor");
-                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
-                    showTemplate(template, model, writer);
+                    loadFailedTemplate(writer, model);
                 }
             } else if (checkExists.checkStudentExists(email)) {
                 LOG.info("LoginServlet.java: Check exists Student email");
@@ -111,25 +104,36 @@ public class LoginServlet extends HttpServlet {
                     LOG.info("Check exists Student password");
 
                     session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadStudent(email).getStudentEmail());
+                    session.setAttribute(SESSION_ATTRIBUTE_NAME, downloadUserToDatabase.downloadStudent(email).getStudentName());
+                    session.setAttribute(SESSION_ATTRIBUTE_LASTNAME, downloadUserToDatabase.downloadStudent(email).getStudentLastname());
+
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_STUDENT);
                     LOG.info("LoginServlet.java: Loaded template student");
 
                     model.put("sessionEmail", downloadUserToDatabase.downloadStudent(email).getStudentEmail());
+                    model.put("sessionName", downloadUserToDatabase.downloadStudent(email).getStudentName());
+                    model.put("sessionLastname", downloadUserToDatabase.downloadStudent(email).getStudentLastname());
                     showTemplate(template, model, writer);
 
                 } else {
                     LOG.warn("LoginServlet.java: Failed password Student");
-                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
-                    showTemplate(template, model, writer);
+                    loadFailedTemplate(writer, model);
                 }
+            } else {
+                LOG.warn("LoginServlet.java: User not found in database");
+                loadFailedTemplate(writer, model);
             }
 
 
         } else {
             LOG.warn("LoginServlet.java: Email or Password Empty");
-            template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
-            showTemplate(template, model, writer);
+            loadFailedTemplate(writer, model);
         }
+    }
+
+    private void loadFailedTemplate(PrintWriter writer, Map<String, Object> model) throws IOException {
+        template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
+        showTemplate(template, model, writer);
     }
 
     private void showTemplate(Template template, Map<String, Object> model, PrintWriter writer) {
