@@ -3,11 +3,16 @@ package servlet;
 import authentication.CheckExists;
 import authentication.CheckPassword;
 import authentication.DownloadUserToDatabase;
+import date.model.Instructor;
+import date.model.Manager;
+import date.model.Student;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import session.SetSession;
+
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -29,9 +34,6 @@ public class LoginServlet extends HttpServlet {
     private static final String TEMPLATE_INSTRUCTOR = "instructor-menu";
     private static final String TEMPLATE_STUDENT = "student-menu";
     private static final String TEMPLATE_LOGIN_FAILED = "failed-login";
-    private static final String SESSION_ATTRIBUTE_EMAIL = "userEmail";
-    private static final String SESSION_ATTRIBUTE_NAME = "userName";
-    private static final String SESSION_ATTRIBUTE_LASTNAME = "userLastname";
 
     @Inject
     private TemplateProvider templateProvider;
@@ -41,7 +43,8 @@ public class LoginServlet extends HttpServlet {
     private CheckPassword checkPassword;
     @Inject
     private DownloadUserToDatabase downloadUserToDatabase;
-
+    @Inject
+    private SetSession setSession;
     Template template;
 
     @Override
@@ -60,59 +63,61 @@ public class LoginServlet extends HttpServlet {
             LOG.info("LoginServlet.java: Start Authentication. {}", email);
 
             if (checkExists.checkManagerExists(email)) {
-                LOG.info("LoginServlet.java: Check exists Manager email");
+                LOG.info("Login as Manager");
                 if (checkPassword.checkManagerPassword(email, password)) {
-                    LOG.info("Check exists Manager password");
-                    session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadManager(email).getManagerEmail());
-                    session.setAttribute(SESSION_ATTRIBUTE_NAME, downloadUserToDatabase.downloadManager(email).getManagerName());
-                    session.setAttribute(SESSION_ATTRIBUTE_LASTNAME, downloadUserToDatabase.downloadManager(email).getManagerLastname());
+                    LOG.info("Manager password correct");
+
+                    Manager manager = downloadUserToDatabase.downloadManager(email);
+                    setSession.manager(session, manager);
+
+                    model.put("sessionEmail", manager.getManagerEmail());
+                    model.put("sessionName", manager.getManagerName());
+                    model.put("sessionLastname", manager.getManagerLastname());
 
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MANAGER);
-                    LOG.info("LoginServlet.java: Loaded template manager");
+                    LOG.info("Loaded template: {}", TEMPLATE_MANAGER);
 
-                    model.put("sessionEmail", downloadUserToDatabase.downloadManager(email).getManagerEmail());
-                    model.put("sessionName", downloadUserToDatabase.downloadManager(email).getManagerName());
-                    model.put("sessionLastname", downloadUserToDatabase.downloadManager(email).getManagerLastname());
                     showTemplate(template, model, writer);
+
                 } else {
-                    LOG.warn("LoginServlet.java: Failed password Manager");
+                    LOG.warn("Failed password Manager");
                     loadFailedTemplate(writer, model);
                 }
             } else if (checkExists.checkInstructorExists(email)) {
-                LOG.info("LoginServlet.java: Check exists Instructor email");
+                LOG.info("Login as Instructor");
                 if (checkPassword.checkInstructorPassword(email, password)) {
-                    LOG.info("Check exists Instructor password");
+                    LOG.info("Instructor password correct");
 
-                    session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
-                    session.setAttribute(SESSION_ATTRIBUTE_NAME, downloadUserToDatabase.downloadInstructor(email).getInstructorName());
-                    session.setAttribute(SESSION_ATTRIBUTE_LASTNAME, downloadUserToDatabase.downloadInstructor(email).getInstructorLastname());
-
-                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_INSTRUCTOR);
-                    LOG.info("LoginServlet.java: Loaded template instructor");
+                    Instructor instructor = downloadUserToDatabase.downloadInstructor(email);
+                    setSession.instructor(session, instructor);
 
                     model.put("sessionEmail", downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
                     model.put("sessionName", downloadUserToDatabase.downloadInstructor(email).getInstructorName());
                     model.put("sessionLastname", downloadUserToDatabase.downloadInstructor(email).getInstructorLastname());
+
+                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_INSTRUCTOR);
+                    LOG.info("Loaded template: {}", TEMPLATE_INSTRUCTOR);
+
                     showTemplate(template, model, writer);
                 } else {
-                    LOG.warn("LoginServlet.java: Failed password Instructor");
+                    LOG.warn("Failed password Instructor");
                     loadFailedTemplate(writer, model);
                 }
             } else if (checkExists.checkStudentExists(email)) {
-                LOG.info("LoginServlet.java: Check exists Student email");
+                LOG.info("Login as Student");
                 if (checkPassword.checkStudentPassword(email, password)) {
-                    LOG.info("Check exists Student password");
+                    LOG.info("Student password correct");
 
-                    session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadStudent(email).getStudentEmail());
-                    session.setAttribute(SESSION_ATTRIBUTE_NAME, downloadUserToDatabase.downloadStudent(email).getStudentName());
-                    session.setAttribute(SESSION_ATTRIBUTE_LASTNAME, downloadUserToDatabase.downloadStudent(email).getStudentLastname());
-
-                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_STUDENT);
-                    LOG.info("LoginServlet.java: Loaded template student");
+                    Student student = downloadUserToDatabase.downloadStudent(email);
+                    setSession.student(session, student);
 
                     model.put("sessionEmail", downloadUserToDatabase.downloadStudent(email).getStudentEmail());
                     model.put("sessionName", downloadUserToDatabase.downloadStudent(email).getStudentName());
                     model.put("sessionLastname", downloadUserToDatabase.downloadStudent(email).getStudentLastname());
+
+                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_STUDENT);
+                    LOG.info("Loaded template: {}", TEMPLATE_STUDENT);
+
                     showTemplate(template, model, writer);
 
                 } else {
@@ -144,5 +149,6 @@ public class LoginServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }
