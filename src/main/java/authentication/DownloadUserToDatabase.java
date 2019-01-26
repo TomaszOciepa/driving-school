@@ -1,6 +1,8 @@
 package authentication;
 
+import date.dao.InstructorDao;
 import date.dao.ManagerDao;
+import date.model.Instructor;
 import date.model.Manager;
 
 import javax.ejb.Stateless;
@@ -13,6 +15,8 @@ public class DownloadUserToDatabase {
 
     @Inject
     private ManagerDao managerDao;
+    @Inject
+    private InstructorDao instructorDao;
 
     public Manager downloadManager(String email) {
 
@@ -23,5 +27,15 @@ public class DownloadUserToDatabase {
 
         Manager manager = new Manager();
         return manager = managersEmail.get(0);
+    }
+
+    public Instructor downloadInstructor(String email) {
+        List<Instructor> instructorList = instructorDao.findAll();
+        List<Instructor> instructorsEmail = instructorList.stream()
+                .filter(i -> i.getInstructorEmail().equals(email))
+                .collect(Collectors.toList());
+
+        Instructor instructor = new Instructor();
+        return instructor = instructorsEmail.get(0);
     }
 }

@@ -67,31 +67,57 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         if (!email.isEmpty() && !password.isEmpty()) {
-            LOG.info("mail nie jest pusty");
+            LOG.info("LoginServlet.java: Start Authentication. {}", email);
+
             if (checkExists.checkManagerExists(email)) {
-                LOG.info("sprawdzam czy istnieje");
-                if (checkPassword.checkManagerPassword(email, password)){
-                    LOG.info("Sprawdzam hasło");
+                LOG.info("LoginServlet.java: Check exists Manager email");
+                if (checkPassword.checkManagerPassword(email, password)) {
+                    LOG.info("Check exists Manager password");
                     session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadManager(email).getManagerEmail());
                     session.setAttribute(SESSION_ATTRIBUTE_NAME, downloadUserToDatabase.downloadManager(email).getManagerName());
                     session.setAttribute(SESSION_ATTRIBUTE_LASTNAME, downloadUserToDatabase.downloadManager(email).getManagerLastname());
 
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MANAGER);
-                    LOG.info("ustawiłem template");
+                    LOG.info("LoginServlet.java: Loaded template manager");
+
                     model.put("sessionEmail", downloadUserToDatabase.downloadManager(email).getManagerEmail());
                     model.put("sessionName", downloadUserToDatabase.downloadManager(email).getManagerName());
                     model.put("sessionLastname", downloadUserToDatabase.downloadManager(email).getManagerLastname());
                     showTemplate(template, model, writer);
+                } else {
+                    LOG.warn("LoginServlet.java: Failed password Manager");
+                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
+                    showTemplate(template, model, writer);
+                }
+            } else if (checkExists.checkInstructorExists(email)) {
+                LOG.info("LoginServlet.java: Check exists Instructor email");
+                if (checkPassword.checkInstructorPassword(email, password)) {
+                    LOG.info("Check exists Instructor password");
+                    session.setAttribute(SESSION_ATTRIBUTE_EMAIL, downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
+
+                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_INSTRUCTOR);
+                    LOG.info("LoginServlet.java: Loaded template instructor");
+
+                    model.put("sessionEmail", downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
+                    showTemplate(template, model, writer);
+                } else {
+                    LOG.warn("LoginServlet.java: Failed password Instructor");
+                    template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
+                    showTemplate(template, model, writer);
                 }
             }
 
+
+        } else {
+            LOG.warn("LoginServlet.java: Email or Password Empty");
+            template = templateProvider.getTemplate(getServletContext(), TEMPLATE_LOGIN_FAILED);
+            showTemplate(template, model, writer);
         }
     }
 
-    private void showTemplate(Template template, Map<String, Object> model, PrintWriter writer){
+    private void showTemplate(Template template, Map<String, Object> model, PrintWriter writer) {
         try {
             template.process(model, writer);
-            LOG.info("zalogowany");
         } catch (TemplateException e) {
             e.printStackTrace();
         } catch (IOException e) {
