@@ -36,6 +36,7 @@ public class LogoutServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         session.invalidate();
+        
         LOG.warn("remove session");
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);

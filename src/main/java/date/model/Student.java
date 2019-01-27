@@ -1,6 +1,7 @@
 package date.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -11,6 +12,10 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "STUDENT_ID")
     private int studentId;
+
+    @Column(name = "STUDENT_ROLE")
+    @NotNull
+    private int studentRole;
 
     @Column(name = "STUDENT_EMAIL")
     private String studentEmail;
@@ -48,7 +53,8 @@ public class Student {
     public Student() {
     }
 
-    public Student(String studentEmail, String studentPassword, String studentSalt, String studentName, String studentLastname, String studentPESEL, String studentPhone, String studentStatus, String studentCity, String studentStreet, LocalDate studentDateRegistration) {
+    public Student(int studentRole, String studentEmail, String studentPassword, String studentSalt, String studentName, String studentLastname, String studentPESEL, String studentPhone, String studentStatus, String studentCity, String studentStreet, LocalDate studentDateRegistration) {
+        this.studentRole = studentRole;
         this.studentEmail = studentEmail;
         this.studentPassword = studentPassword;
         this.studentSalt = studentSalt;
@@ -68,6 +74,14 @@ public class Student {
 
     public void setStudentId(int studentId) {
         this.studentId = studentId;
+    }
+
+    public int getStudentRole() {
+        return studentRole;
+    }
+
+    public void setStudentRole(int studentRole) {
+        this.studentRole = studentRole;
     }
 
     public String getStudentEmail() {

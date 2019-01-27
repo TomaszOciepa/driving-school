@@ -2,6 +2,7 @@ package date.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -12,6 +13,10 @@ public class Manager {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MANAGER_ID")
     private int managerId;
+
+    @Column(name = "MANAGER_Role")
+    @NotNull
+    private int managerRole;
 
     @Column(name = "MANAGER_EMAIL")
     private String managerEmail;
@@ -34,7 +39,8 @@ public class Manager {
     public Manager() {
     }
 
-    public Manager(String managerEmail, String managerPassword, String managerSalt, String managerName, String managerLastname, LocalDate managerDateRegistration) {
+    public Manager(int managerRole, String managerEmail, String managerPassword, String managerSalt, String managerName, String managerLastname, LocalDate managerDateRegistration) {
+        this.managerRole = managerRole;
         this.managerEmail = managerEmail;
         this.managerPassword = managerPassword;
         this.managerSalt = managerSalt;
@@ -49,6 +55,14 @@ public class Manager {
 
     public void setManagerId(int managerId) {
         this.managerId = managerId;
+    }
+
+    public int getManagerRole() {
+        return managerRole;
+    }
+
+    public void setManagerRole(int managerRole) {
+        this.managerRole = managerRole;
     }
 
     public String getManagerEmail() {

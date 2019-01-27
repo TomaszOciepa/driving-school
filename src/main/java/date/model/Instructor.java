@@ -1,6 +1,7 @@
 package date.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -11,6 +12,10 @@ public class Instructor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "INSTRUCTOR_ID")
     private int instructorId;
+
+    @Column(name = "INSTRUCTOR_ROLE")
+    @NotNull
+    private int instructorRole;
 
     @Column(name = "INSTRUCTOR_EMAIL")
     private String instructorEmail;
@@ -42,7 +47,8 @@ public class Instructor {
     public Instructor() {
     }
 
-    public Instructor(String instructorEmail, String instructorPassword, String instructorSalt, String instructorName, String instructorLastname, String instructorPhone, String instructorStreet, String instructorCity, LocalDate instructorDateRegistration) {
+    public Instructor(int instructorRole, String instructorEmail, String instructorPassword, String instructorSalt, String instructorName, String instructorLastname, String instructorPhone, String instructorStreet, String instructorCity, LocalDate instructorDateRegistration) {
+        this.instructorRole = instructorRole;
         this.instructorEmail = instructorEmail;
         this.instructorPassword = instructorPassword;
         this.instructorSalt = instructorSalt;
@@ -54,28 +60,20 @@ public class Instructor {
         this.instructorDateRegistration = instructorDateRegistration;
     }
 
-    public String getInstructorName() {
-        return instructorName;
-    }
-
-    public void setInstructorName(String instructorName) {
-        this.instructorName = instructorName;
-    }
-
-    public String getInstructorLastname() {
-        return instructorLastname;
-    }
-
-    public void setInstructorLastname(String instructorLastname) {
-        this.instructorLastname = instructorLastname;
-    }
-
     public int getInstructorId() {
         return instructorId;
     }
 
     public void setInstructorId(int instructorId) {
         this.instructorId = instructorId;
+    }
+
+    public int getInstructorRole() {
+        return instructorRole;
+    }
+
+    public void setInstructorRole(int instructorRole) {
+        this.instructorRole = instructorRole;
     }
 
     public String getInstructorEmail() {
@@ -100,6 +98,22 @@ public class Instructor {
 
     public void setInstructorSalt(String instructorSalt) {
         this.instructorSalt = instructorSalt;
+    }
+
+    public String getInstructorName() {
+        return instructorName;
+    }
+
+    public void setInstructorName(String instructorName) {
+        this.instructorName = instructorName;
+    }
+
+    public String getInstructorLastname() {
+        return instructorLastname;
+    }
+
+    public void setInstructorLastname(String instructorLastname) {
+        this.instructorLastname = instructorLastname;
     }
 
     public String getInstructorPhone() {
