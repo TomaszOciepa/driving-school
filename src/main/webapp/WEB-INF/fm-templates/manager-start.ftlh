@@ -1,8 +1,8 @@
 <#include "manager-header.ftlh">
 
 <h1>Manager logged</h1>
-<p>email: ${sessionEmail}</p>
-<p>Name: ${sessionName}</p>
-<p>Lastname: ${sessionLastname}</p>
+<p>email: ${user.managerEmail}</p>
+<p>Name: ${user.managerName}</p>
+<p>Lastname: ${user.managerLastname}</p>
 
 <#include "manager-footer.ftlh">

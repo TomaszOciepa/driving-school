@@ -11,8 +11,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import session.SetSession;
-
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -43,8 +41,7 @@ public class LoginServlet extends HttpServlet {
     private CheckPassword checkPassword;
     @Inject
     private DownloadUserToDatabase downloadUserToDatabase;
-    @Inject
-    private SetSession setSession;
+
     Template template;
 
     @Override
@@ -68,11 +65,9 @@ public class LoginServlet extends HttpServlet {
                     LOG.info("Manager password correct");
 
                     Manager manager = downloadUserToDatabase.downloadManager(email);
-                    setSession.manager(session, manager);
-
-                    model.put("sessionEmail", manager.getManagerEmail());
-                    model.put("sessionName", manager.getManagerName());
-                    model.put("sessionLastname", manager.getManagerLastname());
+                    session.setAttribute("user", manager);
+                    Manager managerSession = (Manager) session.getAttribute("user");
+                    model.put("user", managerSession);
 
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MANAGER);
                     LOG.info("Loaded template: {}", TEMPLATE_MANAGER);
@@ -89,11 +84,9 @@ public class LoginServlet extends HttpServlet {
                     LOG.info("Instructor password correct");
 
                     Instructor instructor = downloadUserToDatabase.downloadInstructor(email);
-                    setSession.instructor(session, instructor);
-
-                    model.put("sessionEmail", downloadUserToDatabase.downloadInstructor(email).getInstructorEmail());
-                    model.put("sessionName", downloadUserToDatabase.downloadInstructor(email).getInstructorName());
-                    model.put("sessionLastname", downloadUserToDatabase.downloadInstructor(email).getInstructorLastname());
+                    session.setAttribute("user", instructor);
+                    Instructor instructorSession = (Instructor) session.getAttribute("user");
+                    model.put("user", instructorSession);
 
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_INSTRUCTOR);
                     LOG.info("Loaded template: {}", TEMPLATE_INSTRUCTOR);
@@ -109,11 +102,9 @@ public class LoginServlet extends HttpServlet {
                     LOG.info("Student password correct");
 
                     Student student = downloadUserToDatabase.downloadStudent(email);
-                    setSession.student(session, student);
-
-                    model.put("sessionEmail", downloadUserToDatabase.downloadStudent(email).getStudentEmail());
-                    model.put("sessionName", downloadUserToDatabase.downloadStudent(email).getStudentName());
-                    model.put("sessionLastname", downloadUserToDatabase.downloadStudent(email).getStudentLastname());
+                    session.setAttribute("user", student);
+                    Student studentSession = (Student) session.getAttribute("user");
+                    model.put("user", studentSession);
 
                     template = templateProvider.getTemplate(getServletContext(), TEMPLATE_STUDENT);
                     LOG.info("Loaded template: {}", TEMPLATE_STUDENT);
@@ -128,7 +119,6 @@ public class LoginServlet extends HttpServlet {
                 LOG.warn("LoginServlet.java: User not found in database");
                 loadFailedTemplate(writer, model);
             }
-
 
         } else {
             LOG.warn("LoginServlet.java: Email or Password Empty");

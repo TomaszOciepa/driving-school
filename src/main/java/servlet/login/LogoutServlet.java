@@ -1,5 +1,6 @@
 package servlet.login;
 
+import date.model.Manager;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -33,10 +34,10 @@ public class LogoutServlet extends HttpServlet {
         resp.setContentType("text/html;charset=UTF-8");
         final PrintWriter writer = resp.getWriter();
         Map<String, Object> model = new HashMap<>();
-        HttpSession session = req.getSession(true);
+        HttpSession session = req.getSession();
 
+        session.removeAttribute("user");
         session.invalidate();
-        
         LOG.warn("remove session");
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);

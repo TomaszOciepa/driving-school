@@ -1,7 +1,7 @@
 <#include "instructor-header.ftlh">
 <h1>Instructor logged</h1>
-<p>Email: ${sessionEmail}</p>
-<p>Name: ${sessionName}</p>
-<p>Lastname: ${sessionLastname}</p>
+<p>Email: ${user.instructorEmail}</p>
+<p>Name: ${user.instructorName}</p>
+<p>Lastname: ${user.instructorLastname}</p>
 
 <#include "instructor.footer.ftlh">
