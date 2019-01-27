@@ -1,4 +1,4 @@
-package servlet;
+package servlet.login;
 
 import authentication.CheckExists;
 import authentication.CheckPassword;
@@ -30,7 +30,7 @@ import java.util.Map;
 public class LoginServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
-    private static final String TEMPLATE_MANAGER = "manager-menu";
+    private static final String TEMPLATE_MANAGER = "manager-start";
     private static final String TEMPLATE_INSTRUCTOR = "instructor-menu";
     private static final String TEMPLATE_STUDENT = "student-menu";
     private static final String TEMPLATE_LOGIN_FAILED = "failed-login";
