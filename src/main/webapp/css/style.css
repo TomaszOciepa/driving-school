@@ -113,6 +113,18 @@ input, select {
     padding-bottom: 30px;
 }
 
+.wrap-admin{
+    min-height: 1000px;
+    background-color: #adb5bd;
+    background-image: url("../img/admin-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    padding-bottom: 30px;
+}
+
+
 .background-opacity{
     background-color: rgba(160, 141, 109, 0.5);
 }
