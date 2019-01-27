@@ -31,8 +31,8 @@ public class LoginServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
     private static final String TEMPLATE_MANAGER = "manager-start";
-    private static final String TEMPLATE_INSTRUCTOR = "instructor-menu";
-    private static final String TEMPLATE_STUDENT = "student-menu";
+    private static final String TEMPLATE_INSTRUCTOR = "instructor-start";
+    private static final String TEMPLATE_STUDENT = "student-start";
     private static final String TEMPLATE_LOGIN_FAILED = "failed-login";
 
     @Inject
