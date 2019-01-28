@@ -2,8 +2,6 @@
 <div class="wrap-admin">
     <div class="container">
 
-
-
         <div class="row">
             <div class="col-12">
 
@@ -32,7 +30,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Instructors</h5>
                                 <p class="card-text">Manage accounts Instructors</p>
-                                <a href="/" class="btn btn-primary">Go Instructors</a>
+                                <a href="/instructors-list" class="btn btn-primary">Go Instructors</a>
                             </div>
                         </div>
                     </div>
