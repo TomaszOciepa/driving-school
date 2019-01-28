@@ -21,7 +21,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Manager</h5>
                                 <p class="card-text">Manage accounts Managers</p>
-                                <a href="/" class="btn btn-primary">Go Managers</a>
+                                <a href="/managers-list" class="btn btn-primary">Go Managers</a>
                             </div>
                         </div>
                     </div>
