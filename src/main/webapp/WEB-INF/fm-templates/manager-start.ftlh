@@ -39,7 +39,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Students</h5>
                                 <p class="card-text">Manage accounts Students</p>
-                                <a href="/" class="btn btn-primary">Go Students</a>
+                                <a href="/students-list" class="btn btn-primary">Go Students</a>
                             </div>
                         </div>
                     </div>

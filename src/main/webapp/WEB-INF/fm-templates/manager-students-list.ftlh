@@ -3,8 +3,8 @@
     <div class="jumbotron">
         <div class="row">
             <div class="col-8">
-                <h1 class="display-4">Instructors list</h1>
-                <p class="lead">The number of Instructors: <b>${numberRecords}</b></p>
+                <h1 class="display-4">Students list</h1>
+                <p class="lead">The number of Students: <b>${numberRecords}</b></p>
             </div>
         </div>
         <table class="table table-striped">
@@ -17,12 +17,12 @@
             </tr>
             </thead>
             <tbody>
-            <#list instructor as i>
+            <#list student as s>
                 <tr>
-                    <td><h5>${i.instructorId}</h5></td>
-                    <td><h5>${i.instructorEmail}</h5></td>
-                    <td><h5>${i.instructorName}</h5></td>
-                    <td><h5>${i.instructorLastname}</h5></td>
+                    <td><h5>${s.studentId}</h5></td>
+                    <td><h5>${s.studentEmail}</h5></td>
+                    <td><h5>${s.studentName}</h5></td>
+                    <td><h5>${s.studentLastname}</h5></td>
                     <td>
                         <a href="/" class="btn btn-dark">Edit</a>
                     </td>
