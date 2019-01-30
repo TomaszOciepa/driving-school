@@ -24,10 +24,13 @@
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Instructors</a>
+                    <a class="nav-link" href="/managers-list">Managers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Students</a>
+                    <a class="nav-link" href="/instructors-list">Instructors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/students-list">Students</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Courses</a>
