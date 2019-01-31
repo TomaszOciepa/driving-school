@@ -128,3 +128,7 @@ input, select {
 .background-opacity{
     background-color: rgba(160, 141, 109, 0.5);
 }
+
+.padding{
+    padding: 10px;
+}
