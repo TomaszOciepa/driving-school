@@ -1,5 +1,6 @@
 package servlet.manager;
 
+import authentication.CheckExists;
 import date.dao.ManagerDao;
 import date.model.Manager;
 import freemarker.TemplateProvider;
@@ -30,6 +31,8 @@ public class AccountManagerEditServlet extends HttpServlet {
     private TemplateProvider templateProvider;
     @Inject
     private ManagerDao managerDao;
+    @Inject
+    private CheckExists checkExists;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,6 +52,26 @@ public class AccountManagerEditServlet extends HttpServlet {
             template.process(model, writer);
         } catch (TemplateException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String email = req.getParameter("email");
+        String password =req.getParameter("password");
+        String name =req.getParameter("name");
+        String lastName =req.getParameter("lastname");
+
+
+
+    }
+
+    private boolean checkExistsEmail(String email){
+        if (checkExists.checkManagerExists(email) || checkExists.checkInstructorExists(email) || checkExists.checkStudentExists(email)){
+            return false;
+        } else{
+            return true;
         }
     }
 }

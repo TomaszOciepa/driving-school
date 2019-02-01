@@ -12,19 +12,19 @@
             <form action="doPost" method="/my-account-edi">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
-                    <input value="${user.managerEmail}" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                    <input value="${user.managerEmail}" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Password</label>
-                    <input value="${user.managerPassword}" type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <input value="${user.managerPassword}" name="password" type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputName">Name</label>
-                    <input value="${user.managerName}" type="text" class="form-control" id="exampleInputName" placeholder="Name">
+                    <input value="${user.managerName}" name="name" type="text" class="form-control" id="exampleInputName" placeholder="Name">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputLastName">Lastname</label>
-                    <input value="${user.managerLastname}" type="text" class="form-control" id="exampleInputLastName" placeholder="Lastname">
+                    <input value="${user.managerLastname}" name="lastname" type="text" class="form-control" id="exampleInputLastName" placeholder="Lastname">
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
