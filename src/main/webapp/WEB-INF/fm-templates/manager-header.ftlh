@@ -41,7 +41,7 @@
                         Signed (${user.managerEmail})
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="/my-account">My account</a>
                         <a class="dropdown-item" href="#">Settings</a>
                         <a class="dropdown-item" href="/logout">Log out</a>
                     </div>
@@ -49,6 +49,4 @@
             </ul>
         </div>
     </nav>
-
-
 </header>
