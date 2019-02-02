@@ -25,7 +25,8 @@ import java.util.Map;
 public class AccountManagerEditServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(AccountManagerEditServlet.class);
-    private static final String TEMPLATE_NAME = "manager-my-account-edit";
+    private static final String TEMPLATE_MY_ACCOUNT = "manager-my-account";
+    private static final String TEMPLATE_MY_ACCOUNT_EDIT = "manager-my-account-edit";
 
     @Inject
     private TemplateProvider templateProvider;
@@ -44,8 +45,9 @@ public class AccountManagerEditServlet extends HttpServlet {
 
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MY_ACCOUNT_EDIT);
 
-        loadTemplate(writer, model);
+        loadTemplate(writer, model, template);
     }
 
     @Override
@@ -57,22 +59,23 @@ public class AccountManagerEditServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
         Manager sessionUser = (Manager) session.getAttribute("user");
         model.put("user", sessionUser);
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MY_ACCOUNT);
 
         if (sessionUser.getManagerEmail().equals(req.getParameter("email"))) {
             updateUser(req, sessionUser);
             LOG.info("User has been updated");
             model.put("SuccesUpdate", "User has been updated");
-            loadTemplate(writer, model);
+            loadTemplate(writer, model, template);
         } else {
             if (checkExistsEmail(req.getParameter("email"))) {
                 LOG.info("{} email is already busy", sessionUser.getManagerEmail());
                 model.put("FailedUpdate", "Email is already busy. Try again.");
-                loadTemplate(writer, model);
+                loadTemplate(writer, model, template);
             } else {
                 updateUser(req, sessionUser);
                 LOG.info("User has been updated");
                 model.put("SuccesUpdate", "User has been updated");
-                loadTemplate(writer, model);
+                loadTemplate(writer, model, template);
             }
         }
     }
@@ -93,9 +96,7 @@ public class AccountManagerEditServlet extends HttpServlet {
         }
     }
 
-    private void loadTemplate(PrintWriter writer, Map<String, Object> model) throws IOException {
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
+    private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
             LOG.info("Load template manager-my-account-edit");
             template.process(model, writer);
@@ -103,4 +104,6 @@ public class AccountManagerEditServlet extends HttpServlet {
             LOG.warn("Failed load template manager-my-account-edit");
         }
     }
+
+
 }

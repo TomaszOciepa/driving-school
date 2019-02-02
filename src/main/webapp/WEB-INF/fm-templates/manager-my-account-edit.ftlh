@@ -4,22 +4,11 @@
         <div class="jumbotron">
             <div class="row">
                 <div class="col-8">
-                    <#if SuccesUpdate ??>
-                        <div class="alert alert-success" role="alert">
-                            ${SuccesUpdate}
-                        </div>
-                    </#if>
-                    <#if FailedUpdate ??>
-                        <div class="alert alert-danger" role="alert">
-                            ${FailedUpdate}
-                        </div>
-                    </#if>
                     <h1 class="display-4">Your Account</h1>
-                    <p class="lead">Edit your account...</p>
                 </div>
             </div>
 
-            <form method="post" action="/my-account-edit">
+            <form method="post" action="/my-account-edit" class="padding">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
                     <input value="${user.managerEmail}" name="email" type="email" class="form-control"
