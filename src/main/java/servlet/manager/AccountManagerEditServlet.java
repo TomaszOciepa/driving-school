@@ -45,33 +45,62 @@ public class AccountManagerEditServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
-
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
-        try {
-            template.process(model, writer);
-        } catch (TemplateException e) {
-            e.printStackTrace();
-        }
+        loadTemplate(writer, model);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        final PrintWriter writer = resp.getWriter();
+        Map<String, Object> model = new HashMap<>();
 
-        String email = req.getParameter("email");
-        String password =req.getParameter("password");
-        String name =req.getParameter("name");
-        String lastName =req.getParameter("lastname");
+        HttpSession session = req.getSession(true);
+        Manager sessionUser = (Manager) session.getAttribute("user");
+        model.put("user", sessionUser);
 
-
-
+        if (sessionUser.getManagerEmail().equals(req.getParameter("email"))) {
+            updateUser(req, sessionUser);
+            LOG.info("User has been updated");
+            model.put("SuccesUpdate", "User has been updated");
+            loadTemplate(writer, model);
+        } else {
+            if (checkExistsEmail(req.getParameter("email"))) {
+                LOG.info("{} email is already busy", sessionUser.getManagerEmail());
+                model.put("FailedUpdate", "Email is already busy. Try again.");
+                loadTemplate(writer, model);
+            } else {
+                updateUser(req, sessionUser);
+                LOG.info("User has been updated");
+                model.put("SuccesUpdate", "User has been updated");
+                loadTemplate(writer, model);
+            }
+        }
     }
 
-    private boolean checkExistsEmail(String email){
-        if (checkExists.checkManagerExists(email) || checkExists.checkInstructorExists(email) || checkExists.checkStudentExists(email)){
-            return false;
-        } else{
+    private void updateUser(HttpServletRequest req, Manager sessionUser) {
+        sessionUser.setManagerEmail(req.getParameter("email"));
+        sessionUser.setManagerPassword(req.getParameter("password"));
+        sessionUser.setManagerName(req.getParameter("name"));
+        sessionUser.setManagerLastname(req.getParameter("lastname"));
+        managerDao.update(sessionUser);
+    }
+
+    private boolean checkExistsEmail(String email) {
+        if (checkExists.checkManagerExists(email) || checkExists.checkInstructorExists(email) || checkExists.checkStudentExists(email)) {
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void loadTemplate(PrintWriter writer, Map<String, Object> model) throws IOException {
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
+
+        try {
+            LOG.info("Load template manager-my-account-edit");
+            template.process(model, writer);
+        } catch (TemplateException e) {
+            LOG.warn("Failed load template manager-my-account-edit");
         }
     }
 }
