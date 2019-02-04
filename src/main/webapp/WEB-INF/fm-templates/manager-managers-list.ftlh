@@ -7,6 +7,7 @@
                 <p class="lead">The number of Managers: <b>${numberRecords}</b></p>
             </div>
         </div>
+        <a class="btn btn-primary" href="/new-manager">New Manager</a>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -33,6 +34,5 @@
             </#list>
             </tbody>
         </table>
-    </div>
 </div>
 <#include "manager-footer.ftlh">
