@@ -1,6 +1,7 @@
 package servlet.manager;
 
 import authentication.CheckExists;
+import authentication.PasswordHashing;
 import date.dao.ManagerDao;
 import date.model.Manager;
 import freemarker.TemplateProvider;
@@ -33,6 +34,8 @@ public class NewManagerServlet extends HttpServlet {
     private ManagerDao managerDao;
     @Inject
     private CheckExists checkExists;
+    @Inject
+    PasswordHashing passwordHashing;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -76,6 +79,9 @@ public class NewManagerServlet extends HttpServlet {
             newManager.setManagerLastname(req.getParameter("lastname"));
             newManager.setManagerRole(1);
             newManager.setManagerDateRegistration(LocalDate.now());
+            String pass = "pass123";
+            newManager.setManagerSalt(pass);
+            newManager.setManagerPassword(passwordHashing.generateHash(pass));
             managerDao.save(newManager);
             model.put("SuccesUpdate", "Added New Manager");
             loadTemplate(writer, model, template);

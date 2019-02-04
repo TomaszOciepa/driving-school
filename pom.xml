@@ -80,6 +80,14 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+
+    <!--jBCrypt-->
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.3m</version>
+    </dependency>
+
   </dependencies>
 
   <build>

@@ -21,6 +21,8 @@ public class CheckPassword {
     private InstructorDao instructorDao;
     @Inject
     private StudentDao studentDao;
+    @Inject
+    PasswordHashing passwordHashing;
 
     public boolean checkManagerPassword(String email, String password) {
 
@@ -28,8 +30,9 @@ public class CheckPassword {
         List<Manager> managersEmail = managersList.stream()
                 .filter(m -> m.getManagerEmail().equals(email))
                 .collect(Collectors.toList());
+        String passwordHash = managersEmail.get(0).getManagerPassword();
 
-        if (managersEmail.get(0).getManagerEmail().equals(email) && managersEmail.get(0).getManagerPassword().equals(password)) {
+        if (managersEmail.get(0).getManagerEmail().equals(email) && passwordHashing.checkPassword(password, passwordHash)) {
             return true;
         } else {
             return false;
