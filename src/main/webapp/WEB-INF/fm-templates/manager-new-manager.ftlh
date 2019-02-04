@@ -6,7 +6,7 @@
                 <div class="col-8">
                     <#if SuccesUpdate ??>
                         <div class="alert alert-success" role="alert">
-                            ${SuccesUpdate}
+                            ${SuccesUpdate} <a href="/managers-list">Show Managers list</a>
                         </div>
                     </#if>
                     <#if FailedUpdate ??>
