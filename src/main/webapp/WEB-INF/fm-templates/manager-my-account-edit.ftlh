@@ -15,11 +15,6 @@
                            id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input value="${user.managerPassword}" name="password" type="text" class="form-control"
-                           id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-group">
                     <label for="exampleInputName">Name</label>
                     <input value="${user.managerName}" name="name" type="text" class="form-control"
                            id="exampleInputName" placeholder="Name">

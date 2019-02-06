@@ -82,7 +82,6 @@ public class AccountManagerEditServlet extends HttpServlet {
 
     private void updateUser(HttpServletRequest req, Manager sessionUser) {
         sessionUser.setManagerEmail(req.getParameter("email"));
-        sessionUser.setManagerPassword(req.getParameter("password"));
         sessionUser.setManagerName(req.getParameter("name"));
         sessionUser.setManagerLastname(req.getParameter("lastname"));
         managerDao.update(sessionUser);
