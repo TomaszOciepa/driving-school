@@ -83,7 +83,6 @@ public class NewManagerServlet extends HttpServlet {
             newManager.setManagerRole(1);
             newManager.setManagerDateRegistration(LocalDate.now());
             String password = generateRandomPassword.generatePassword();
-            newManager.setManagerSalt(password);
             newManager.setManagerPassword(passwordHashing.generateHash(password));
             managerDao.save(newManager);
             model.put("SuccesUpdate", "Added New Manager");

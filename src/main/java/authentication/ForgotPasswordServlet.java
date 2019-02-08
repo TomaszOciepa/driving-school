@@ -1,5 +1,11 @@
 package authentication;
 
+import date.dao.InstructorDao;
+import date.dao.ManagerDao;
+import date.dao.StudentDao;
+import date.model.Instructor;
+import date.model.Manager;
+import date.model.Student;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -29,6 +35,20 @@ public class ForgotPasswordServlet extends HttpServlet {
     private TemplateProvider templateProvider;
     @Inject
     private SendMail mail;
+    @Inject
+    private CheckExists checkExists;
+    @Inject
+    private PasswordHashing passwordHashing;
+    @Inject
+    private GenerateRandomPassword generateRandomPassword;
+    @Inject
+    private ManagerDao managerDao;
+    @Inject
+    private InstructorDao instructorDao;
+    @Inject
+    private StudentDao studentDao;
+    @Inject
+    private DownloadUserToDatabase downloadUserToDatabase;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,16 +61,54 @@ public class ForgotPasswordServlet extends HttpServlet {
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         model.put("giveMail", "enter your email");
 
+        loadTemplate(writer, model, template);
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final PrintWriter writer = resp.getWriter();
+        Map<String, Object> model = new HashMap<>();
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
+
+        String email = req.getParameter("email");
+
+
+        if (checkExists.checkManagerExists(email)){
+            Manager manager = downloadUserToDatabase.downloadManager(email);
+            String password = generateRandomPassword.generatePassword();
+            manager.setManagerPassword(passwordHashing.generateHash(password));
+            managerDao.update(manager);
+            model.put("sendMail", "check your email");
+            mail.sendMail(email, password);
+            loadTemplate(writer, model, template);
+        } else if (checkExists.checkInstructorExists(email)){
+            Instructor instructor = downloadUserToDatabase.downloadInstructor(email);
+            String password = generateRandomPassword.generatePassword();
+            instructor.setInstructorPassword(passwordHashing.generateHash(password));
+            instructorDao.update(instructor);
+            model.put("sendMail", "check your email");
+            mail.sendMail(email, password);
+        } else if (checkExists.checkStudentExists(email)){
+            Student student = downloadUserToDatabase.downloadStudent(email);
+            String password = generateRandomPassword.generatePassword();
+            student.setStudentPassword(passwordHashing.generateHash(password));
+            studentDao.update(student);
+            model.put("sendMail", "check your email");
+            loadTemplate(writer, model, template);
+        } else {
+            model.put("errorSendMail", "check your email");
+            loadTemplate(writer, model, template);
+        }
+
+
+
+    }
+
+    private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
             template.process(model, writer);
         } catch (TemplateException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        mail.sendMail();
     }
 }

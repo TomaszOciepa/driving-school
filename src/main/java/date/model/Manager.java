@@ -24,9 +24,6 @@ public class Manager {
     @Column(name = "MANAGER_PASSWORD")
     private String managerPassword;
 
-    @Column(name = "MANAGER_SALT")
-    private String managerSalt;
-
     @Column(name = "MANAGER_NAME")
     private String managerName;
 
@@ -39,11 +36,10 @@ public class Manager {
     public Manager() {
     }
 
-    public Manager(int managerRole, String managerEmail, String managerPassword, String managerSalt, String managerName, String managerLastname, LocalDate managerDateRegistration) {
+    public Manager(int managerRole, String managerEmail, String managerPassword, String managerName, String managerLastname, LocalDate managerDateRegistration) {
         this.managerRole = managerRole;
         this.managerEmail = managerEmail;
         this.managerPassword = managerPassword;
-        this.managerSalt = managerSalt;
         this.managerName = managerName;
         this.managerLastname = managerLastname;
         this.managerDateRegistration = managerDateRegistration;
@@ -79,14 +75,6 @@ public class Manager {
 
     public void setManagerPassword(String managerPassword) {
         this.managerPassword = managerPassword;
-    }
-
-    public String getManagerSalt() {
-        return managerSalt;
-    }
-
-    public void setManagerSalt(String managerSalt) {
-        this.managerSalt = managerSalt;
     }
 
     public String getManagerName() {

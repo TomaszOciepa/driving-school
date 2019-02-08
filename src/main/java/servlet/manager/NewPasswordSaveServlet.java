@@ -51,7 +51,6 @@ public class NewPasswordSaveServlet extends HttpServlet {
 
         if(pass1.equals(pass2)){
 
-            managerSession.setManagerSalt(pass1);
             managerSession.setManagerPassword(passwordHashing.generateHash(pass1));
             managerDao.update(managerSession);
 

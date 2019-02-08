@@ -11,9 +11,9 @@ import java.util.Properties;
 public class SendMail {
 
     final String username = "driveschool.tomek@gmail.com";
-    final String password = "******";
+    final String password = "Pass123!";
 
-    public void sendMail(){
+    public void sendMail( String userEmail, String userPassword){
 
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
@@ -34,10 +34,10 @@ public class SendMail {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("mail"));
 			message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse("tom.ociepa@gmail.com"));
-			message.setSubject("Testing Subject");
-			message.setText("Dear Mail Crawler,"
-				+ "\n\n No spam to my email, please!");
+				InternetAddress.parse(userEmail));
+			message.setSubject("Reset your password");
+			message.setText("We've reset the password. Log in with a temporary password and set a new password."
+				+ "\n\n Your temporary password: " + userPassword);
 
 			Transport.send(message);
 
