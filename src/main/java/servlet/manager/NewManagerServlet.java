@@ -8,6 +8,7 @@ import date.model.Manager;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import mail.SendMail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,8 @@ public class NewManagerServlet extends HttpServlet {
     PasswordHashing passwordHashing;
     @Inject
     GenerateRandomPassword generateRandomPassword;
+    @Inject
+    private SendMail mail;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -85,6 +88,7 @@ public class NewManagerServlet extends HttpServlet {
             String password = generateRandomPassword.generatePassword();
             newManager.setManagerPassword(passwordHashing.generateHash(password));
             managerDao.save(newManager);
+            mail.sendMail(email, password);
             model.put("SuccesUpdate", "Added New Manager");
             loadTemplate(writer, model, template);
         }
