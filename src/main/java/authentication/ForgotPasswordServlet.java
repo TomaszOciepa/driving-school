@@ -88,11 +88,13 @@ public class ForgotPasswordServlet extends HttpServlet {
             instructorDao.update(instructor);
             model.put("sendMail", "check your email");
             mail.sendMail(email, password);
+            loadTemplate(writer, model, template);
         } else if (checkExists.checkStudentExists(email)){
             Student student = downloadUserToDatabase.downloadStudent(email);
             String password = generateRandomPassword.generatePassword();
             student.setStudentPassword(passwordHashing.generateHash(password));
             studentDao.update(student);
+            mail.sendMail(email, password);
             model.put("sendMail", "check your email");
             loadTemplate(writer, model, template);
         } else {

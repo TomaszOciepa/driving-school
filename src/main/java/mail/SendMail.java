@@ -11,7 +11,7 @@ import java.util.Properties;
 public class SendMail {
 
     final String username = "driveschool.tomek@gmail.com";
-    final String password = "Pass123!";
+    final String password = "Pass123@";
 
     public void sendMail( String userEmail, String userPassword){
 

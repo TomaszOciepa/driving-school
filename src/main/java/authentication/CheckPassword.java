@@ -45,7 +45,8 @@ public class CheckPassword {
                 .filter(i -> i.getInstructorEmail().equals(email))
                 .collect(Collectors.toList());
 
-        if (instructorsEmail.get(0).getInstructorEmail().equals(email) && instructorsEmail.get(0).getInstructorPassword().equals(password)) {
+        String passwordHash = instructorsEmail.get(0).getInstructorPassword();
+        if (instructorsEmail.get(0).getInstructorEmail().equals(email) && passwordHashing.checkPassword(password, passwordHash)) {
             return true;
         } else {
             return false;
@@ -57,8 +58,8 @@ public class CheckPassword {
         List<Student> studentsEmail = studentList.stream()
                 .filter(s -> s.getStudentEmail().equals(email))
                 .collect(Collectors.toList());
-
-        if (studentsEmail.get(0).getStudentEmail().equals(email) && studentsEmail.get(0).getStudentPassword().equals(password)) {
+        String passwordHash = studentsEmail.get(0).getStudentPassword();
+        if (studentsEmail.get(0).getStudentEmail().equals(email) && passwordHashing.checkPassword(password, passwordHash)) {
             return true;
         } else {
             return false;

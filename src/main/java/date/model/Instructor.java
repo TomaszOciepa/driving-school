@@ -23,9 +23,6 @@ public class Instructor {
     @Column(name = "INSTRUCTOR_PASSWORD")
     private String instructorPassword;
 
-    @Column(name = "INSTRUCTOR_SALT")
-    private String instructorSalt;
-
     @Column(name = "INSTRUCTOR_NAME")
     private String instructorName;
 
@@ -47,11 +44,10 @@ public class Instructor {
     public Instructor() {
     }
 
-    public Instructor(int instructorRole, String instructorEmail, String instructorPassword, String instructorSalt, String instructorName, String instructorLastname, String instructorPhone, String instructorStreet, String instructorCity, LocalDate instructorDateRegistration) {
+    public Instructor(int instructorRole, String instructorEmail, String instructorPassword, String instructorName, String instructorLastname, String instructorPhone, String instructorStreet, String instructorCity, LocalDate instructorDateRegistration) {
         this.instructorRole = instructorRole;
         this.instructorEmail = instructorEmail;
         this.instructorPassword = instructorPassword;
-        this.instructorSalt = instructorSalt;
         this.instructorName = instructorName;
         this.instructorLastname = instructorLastname;
         this.instructorPhone = instructorPhone;
@@ -90,14 +86,6 @@ public class Instructor {
 
     public void setInstructorPassword(String instructorPassword) {
         this.instructorPassword = instructorPassword;
-    }
-
-    public String getInstructorSalt() {
-        return instructorSalt;
-    }
-
-    public void setInstructorSalt(String instructorSalt) {
-        this.instructorSalt = instructorSalt;
     }
 
     public String getInstructorName() {
