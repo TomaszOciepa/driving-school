@@ -28,7 +28,7 @@
                     <td><h5>${m.managerName}</h5></td>
                     <td><h5>${m.managerLastname}</h5></td>
                     <td>
-                        <a href="/" class="btn btn-dark" type="button">Edit</a>
+                        <a href="/edit-manager?id=${m.managerId}" class="btn btn-dark" type="button">Edit</a>
                     </td>
                     <td>
                         <a href="/delete-manager?id=${m.managerId}" type="button" class="btn btn-danger">Delete</a>

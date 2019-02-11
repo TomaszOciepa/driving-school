@@ -93,7 +93,7 @@ public class Manager {
         this.managerLastname = managerLastname;
     }
 
-    public LocalDate getManagerDateRegistration(LocalDate now) {
+    public LocalDate getManagerDateRegistration() {
         return managerDateRegistration;
     }
 
