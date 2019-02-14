@@ -1,6 +1,7 @@
 package servlet.manager;
 
 import authentication.CheckExists;
+import authentication.DownloadUserToDatabase;
 import date.dao.ManagerDao;
 import date.model.Manager;
 import freemarker.TemplateProvider;
@@ -33,6 +34,8 @@ public class EditManagerServlet extends HttpServlet {
     private ManagerDao managerDao;
     @Inject
     private CheckExists checkExists;
+    @Inject
+    private DownloadUserToDatabase downloadUserToDatabase;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -47,9 +50,10 @@ public class EditManagerServlet extends HttpServlet {
 
         int id = Integer.parseInt(req.getParameter("id"));
 
-        Manager manager = managerDao.findById(id);
+        Manager editedManager = managerDao.findById(id);
 
-        model.put("manager", manager);
+        session.setAttribute("editedManager", editedManager);
+        model.put("manager", editedManager);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         loadTemplate(writer, model, template);
@@ -66,6 +70,8 @@ public class EditManagerServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
+        Manager editedManager = (Manager) session.getAttribute("editedManager");
+
         String email = req.getParameter("email");
         String name = req.getParameter("name");
         String lastName = req.getParameter("lastname");
@@ -73,13 +79,36 @@ public class EditManagerServlet extends HttpServlet {
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         if (checkExists.checkManagerExists(email)) {
-            LOG.info("Email is already busy");
-            model.put("FailedUpdate", "Email is already busy. Try again.");
-            loadTemplate(writer, model, template);
-        } else {
 
+            if (editedManager.getManagerEmail().equals(email)){
+                updateManager(editedManager, email, name, lastName);
+                managerDao.update(editedManager);
+                LOG.info("Manager has bean update");
+                model.put("manager", editedManager);
+                model.put("SuccesUpdate", "Manager has bean update");
+                loadTemplate(writer, model, template);
+            }else {
+                LOG.info("Email is already busy");
+                model.put("manager", editedManager);
+                model.put("FailedUpdate", "Email is already busy. Try again.");
+                loadTemplate(writer, model, template);
+            }
+        } else {
+            updateManager(editedManager, email, name, lastName);
+            LOG.info("Manager has bean update");
+            model.put("manager", editedManager);
+            model.put("SuccesUpdate", "Manager has bean update");
+            loadTemplate(writer, model, template);
         }
 
+    }
+
+    private void updateManager(Manager editedManager, String email, String name, String lastName) {
+        editedManager.setManagerEmail(email);
+        editedManager.setManagerName(name);
+        editedManager.setManagerLastname(lastName);
+
+        managerDao.update(editedManager);
     }
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
