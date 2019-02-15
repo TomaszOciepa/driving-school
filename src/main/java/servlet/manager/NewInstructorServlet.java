@@ -3,7 +3,8 @@ package servlet.manager;
 import authentication.CheckExists;
 import authentication.GenerateRandomPassword;
 import authentication.PasswordHashing;
-import date.dao.ManagerDao;
+import date.dao.InstructorDao;
+import date.model.Instructor;
 import date.model.Manager;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
@@ -25,15 +26,13 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/new-manager")
-public class NewManagerServlet extends HttpServlet {
-    private static final Logger LOG = LoggerFactory.getLogger(NewManagerServlet.class);
-    private static final String TEMPLATE_NAME = "manager-new-manager";
+@WebServlet(urlPatterns = "/new-instructor")
+public class NewInstructorServlet extends HttpServlet {
+    private static final Logger LOG = LoggerFactory.getLogger(NewInstructorServlet.class);
+    private static final String TEMPLATE_NAME = "instructor-new-instructor";
 
     @Inject
     private TemplateProvider templateProvider;
-    @Inject
-    private ManagerDao managerDao;
     @Inject
     private CheckExists checkExists;
     @Inject
@@ -42,10 +41,12 @@ public class NewManagerServlet extends HttpServlet {
     private GenerateRandomPassword generateRandomPassword;
     @Inject
     private SendMail mail;
+    @Inject
+    private InstructorDao instructorDao;
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         resp.setContentType("text/html;charset=UTF-8");
         final PrintWriter writer = resp.getWriter();
         HttpSession session = req.getSession(true);
@@ -55,10 +56,7 @@ public class NewManagerServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
-
-
     }
 
     @Override
@@ -79,18 +77,22 @@ public class NewManagerServlet extends HttpServlet {
             model.put("FailedUpdate", "Email is already busy. Try again.");
             loadTemplate(writer, model, template);
         } else {
-            Manager newManager = new Manager();
-            newManager.setManagerEmail(req.getParameter("email"));
-            newManager.setManagerName(req.getParameter("name"));
-            newManager.setManagerLastname(req.getParameter("lastname"));
-            newManager.setManagerRole(1);
-            newManager.setManagerDateRegistration(LocalDate.now());
+            Instructor newInstructor = new Instructor();
+            newInstructor.setInstructorEmail(email);
+            newInstructor.setInstructorName(req.getParameter("name"));
+            newInstructor.setInstructorLastname("lastname");
+            newInstructor.setInstructorPhone(req.getParameter("phone"));
+            newInstructor.setInstructorStreet(req.getParameter("street"));
+            newInstructor.setInstructorCity(req.getParameter("city"));
+            newInstructor.setInstructorRole(2);
+            newInstructor.setInstructorDateRegistration(LocalDate.now());
             String password = generateRandomPassword.generatePassword();
-            newManager.setManagerPassword(passwordHashing.generateHash(password));
-            managerDao.save(newManager);
+            newInstructor.setInstructorPassword(passwordHashing.generateHash(password));
+            instructorDao.save(newInstructor);
             mail.sendMail(email, password);
-            model.put("SuccesUpdate", "Added New Manager");
+            model.put("SuccesUpdate", "Added New Instructor");
             loadTemplate(writer, model, template);
+
         }
 
     }
@@ -105,10 +107,10 @@ public class NewManagerServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-new-manager");
+            LOG.info("Load template instructor-new-instructor");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-new-manager");
+            LOG.warn("Failed load template instructor-new-instructor");
         }
     }
 }

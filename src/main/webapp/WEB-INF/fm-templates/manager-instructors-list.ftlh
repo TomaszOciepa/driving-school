@@ -7,6 +7,7 @@
                 <p class="lead">The number of Instructors: <b>${numberRecords}</b></p>
             </div>
         </div>
+        <a class="btn btn-primary" href="/new-instructor">New Instructor</a>
         <table class="table table-striped">
             <thead>
             <tr>
