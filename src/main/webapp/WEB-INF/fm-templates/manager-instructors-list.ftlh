@@ -28,7 +28,7 @@
                         <a href="/" class="btn btn-dark">Edit</a>
                     </td>
                     <td>
-                        <a href="/" class="btn btn-dark">Delete</a>
+                        <a href="/delete-instructor?id=${i.instructorId}" class="btn btn-dark">Delete</a>
                     </td>
                 </tr>
             </#list>

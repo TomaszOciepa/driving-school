@@ -80,7 +80,7 @@ public class NewInstructorServlet extends HttpServlet {
             Instructor newInstructor = new Instructor();
             newInstructor.setInstructorEmail(email);
             newInstructor.setInstructorName(req.getParameter("name"));
-            newInstructor.setInstructorLastname("lastname");
+            newInstructor.setInstructorLastname(req.getParameter("lastname"));
             newInstructor.setInstructorPhone(req.getParameter("phone"));
             newInstructor.setInstructorStreet(req.getParameter("street"));
             newInstructor.setInstructorCity(req.getParameter("city"));
