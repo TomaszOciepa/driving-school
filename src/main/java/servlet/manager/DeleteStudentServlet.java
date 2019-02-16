@@ -1,7 +1,7 @@
 package servlet.manager;
 
 import date.dao.InstructorDao;
-import date.dao.ManagerDao;
+import date.dao.StudentDao;
 import date.model.Manager;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
@@ -21,15 +21,16 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/delete-instructor")
-public class DeleteInstructorServlet extends HttpServlet {
-    private static final Logger LOG = LoggerFactory.getLogger(DeleteInstructorServlet.class);
-    private static final String TEMPLATE_NAME = "manager-instructor-delete";
+@WebServlet(urlPatterns = "/delete-student")
+public class DeleteStudentServlet extends HttpServlet {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteStudentServlet.class);
+    private static final String TEMPLATE_NAME = "manager-student-delete";
 
     @Inject
     private TemplateProvider templateProvider;
     @Inject
-    private InstructorDao instructorDao;
+    private StudentDao studentDao;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -43,9 +44,9 @@ public class DeleteInstructorServlet extends HttpServlet {
         model.put("user", managerSession);
 
         int id = Integer.parseInt(req.getParameter("id"));
-        instructorDao.delete(id);
+        studentDao.delete(id);
 
-        model.put("SuccesUpdate", "Instructor account deleted");
+        model.put("SuccesUpdate", "Students account deleted");
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         try {
