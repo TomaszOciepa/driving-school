@@ -1,8 +1,10 @@
 package servlet.manager;
 
 import authentication.CheckExists;
-import date.dao.ManagerDao;
+import date.dao.StudentDao;
+import date.model.Instructor;
 import date.model.Manager;
+import date.model.Student;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -21,16 +23,16 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/edit-manager")
-public class EditManagerServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/edit-student")
+public class EditStudentServlet extends HttpServlet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EditManagerServlet.class);
-    private static final String TEMPLATE_NAME = "manager-manager-edit";
+    private static final Logger LOG = LoggerFactory.getLogger(EditStudentServlet.class);
+    private static final String TEMPLATE_NAME = "manager-student-edit";
 
     @Inject
     private TemplateProvider templateProvider;
     @Inject
-    private ManagerDao managerDao;
+    private StudentDao studentDao;
     @Inject
     private CheckExists checkExists;
 
@@ -46,14 +48,14 @@ public class EditManagerServlet extends HttpServlet {
         model.put("user", managerSession);
 
         int id = Integer.parseInt(req.getParameter("id"));
+        Student editedStudent = studentDao.findById(id);
 
-        Manager editedManager = managerDao.findById(id);
-
-        session.setAttribute("editedManager", editedManager);
-        model.put("manager", editedManager);
+        session.setAttribute("editedStudent", editedStudent);
+        model.put("student", editedStudent);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         loadTemplate(writer, model, template);
+
     }
 
     @Override
@@ -67,44 +69,51 @@ public class EditManagerServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
-        Manager editedManager = (Manager) session.getAttribute("editedManager");
-
+        Student editedStudent = (Student) session.getAttribute("editedStudent");
         String email = req.getParameter("email");
         String name = req.getParameter("name");
         String lastName = req.getParameter("lastname");
+        String phone = req.getParameter("phone");
+        String street = req.getParameter("street");
+        String city = req.getParameter("city");
+        String pesel = req.getParameter("pesel");
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
-        if (checkExists.checkManagerExists(email)) {
+        if (checkExists.checkStudentExists(email)) {
 
-            if (editedManager.getManagerEmail().equals(email)){
-                updateManager(editedManager, email, name, lastName);
-                LOG.info("Manager has bean update");
-                model.put("manager", editedManager);
-                model.put("SuccesUpdate", "Manager has bean update");
+            if (editedStudent.getStudentEmail().equals(email)){
+                updateStudent(editedStudent, email, name, lastName, phone, street, city, pesel);
+                LOG.info("Student has bean update");
+                model.put("student", editedStudent);
+                model.put("SuccesUpdate", "Student has bean update");
                 loadTemplate(writer, model, template);
             }else {
                 LOG.info("Email is already busy");
-                model.put("manager", editedManager);
+                model.put("student", editedStudent);
                 model.put("FailedUpdate", "Email is already busy. Try again.");
                 loadTemplate(writer, model, template);
             }
         } else {
-            updateManager(editedManager, email, name, lastName);
-            LOG.info("Manager has bean update");
-            model.put("manager", editedManager);
-            model.put("SuccesUpdate", "Manager has bean update");
+            updateStudent(editedStudent, email, name, lastName, phone, street, city, pesel);
+            LOG.info("Student has bean update");
+            model.put("student", editedStudent);
+            model.put("SuccesUpdate", "Student has bean update");
             loadTemplate(writer, model, template);
         }
 
+
     }
 
-    private void updateManager(Manager editedManager, String email, String name, String lastName) {
-        editedManager.setManagerEmail(email);
-        editedManager.setManagerName(name);
-        editedManager.setManagerLastname(lastName);
-
-        managerDao.update(editedManager);
+    private void updateStudent(Student editedStudent, String email, String name, String lastName, String phone, String street, String city, String pesel) {
+        editedStudent.setStudentEmail(email);
+        editedStudent.setStudentEmail(name);
+        editedStudent.setStudentLastname(lastName);
+        editedStudent.setStudentPhone(phone);
+        editedStudent.setStudentStreet(street);
+        editedStudent.setStudentCity(city);
+        editedStudent.setStudentPESEL(pesel);
+        studentDao.update(editedStudent);
     }
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {

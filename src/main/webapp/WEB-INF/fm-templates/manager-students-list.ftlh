@@ -25,7 +25,7 @@
                     <td><h5>${s.studentName}</h5></td>
                     <td><h5>${s.studentLastname}</h5></td>
                     <td>
-                        <a href="/" class="btn btn-dark">Edit</a>
+                        <a href="/edit-student?id=${s.studentId}" class="btn btn-dark">Edit</a>
                     </td>
                     <td>
                         <a href="/delete-student?id=${s.studentId}" class="btn btn-dark">Delete</a>

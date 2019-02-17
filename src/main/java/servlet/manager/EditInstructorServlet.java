@@ -1,9 +1,7 @@
 package servlet.manager;
 
 import authentication.CheckExists;
-import authentication.DownloadUserToDatabase;
 import date.dao.InstructorDao;
-import date.dao.ManagerDao;
 import date.model.Instructor;
 import date.model.Manager;
 import freemarker.TemplateProvider;
@@ -26,7 +24,7 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = "/edit-instructor")
 public class EditInstructorServlet extends HttpServlet {
-    private static final Logger LOG = LoggerFactory.getLogger(EditManagerServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EditInstructorServlet.class);
     private static final String TEMPLATE_NAME = "manager-instructor-edit";
 
     @Inject
@@ -35,8 +33,6 @@ public class EditInstructorServlet extends HttpServlet {
     private InstructorDao instructorDao;
     @Inject
     private CheckExists checkExists;
-    @Inject
-    private DownloadUserToDatabase downloadUserToDatabase;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
