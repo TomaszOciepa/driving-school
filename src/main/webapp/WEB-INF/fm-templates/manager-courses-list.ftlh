@@ -30,7 +30,7 @@
                         <a href="/edit-category?id=${c.courseId}" class="btn btn-dark">Edit</a>
                     </td>
                     <td>
-                        <a href="/delete-category?id=${c.courseId}" class="btn btn-dark">Delete</a>
+                        <a href="/delete-course?id=${c.courseId}" class="btn btn-dark">Delete</a>
                     </td>
                 </tr>
             </#list>
