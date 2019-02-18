@@ -51,7 +51,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title font-weight-bold">Courses</h5>
                                     <p class="card-text">Manage Courses</p>
-                                    <a href="/" class="btn btn-primary">Go Courses</a>
+                                    <a href="/courses-list" class="btn btn-primary">Go Courses</a>
                                 </div>
                             </div>
                         </div>
