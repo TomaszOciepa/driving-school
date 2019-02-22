@@ -27,7 +27,7 @@
                     <td><h5>${c.courseDataFinish}</h5></td>
                     <td><h5>${c.courseCatrgoryDriveLicense}</h5></td>
                     <td>
-                        <a href="/edit-category?id=${c.courseId}" class="btn btn-dark">Edit</a>
+                        <a href="/edit-course?id=${c.courseId}" class="btn btn-dark">Edit</a>
                     </td>
                     <td>
                         <a href="/delete-course?id=${c.courseId}" class="btn btn-dark">Delete</a>
