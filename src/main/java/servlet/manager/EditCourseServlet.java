@@ -76,6 +76,7 @@ public class EditCourseServlet extends HttpServlet {
 
         courseDao.update(editedCourse);
         model.put("course", editedCourse);
+        
         model.put("SuccesUpdate", "Course has bean update");
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
