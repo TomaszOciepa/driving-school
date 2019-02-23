@@ -3,6 +3,7 @@ package date.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "STUDENT")
@@ -46,6 +47,13 @@ public class Student {
 
     @Column(name = "STUDENT_DATE_REGISTRATION")
     private LocalDate studentDateRegistration;
+
+    @ManyToMany
+    @JoinTable(name = "STUDENTS_TO_COURSES",
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "STUDENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "COURSE_ID"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "course_id"}))
+    private List<Course> courses;
 
     public Student() {
     }
@@ -158,5 +166,13 @@ public class Student {
 
     public void setStudentDateRegistration(LocalDate studentDateRegistration) {
         this.studentDateRegistration = studentDateRegistration;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 }

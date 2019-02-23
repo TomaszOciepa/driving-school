@@ -52,6 +52,7 @@ public class EditStudentServlet extends HttpServlet {
 
         session.setAttribute("editedStudent", editedStudent);
         model.put("student", editedStudent);
+        model.put("course", editedStudent.getCourses());
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         loadTemplate(writer, model, template);

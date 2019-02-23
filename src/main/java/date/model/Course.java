@@ -2,6 +2,7 @@ package date.model;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "COURSE")
@@ -26,6 +27,9 @@ public class Course {
 
     @Column(name = "COURSE_NUMBER_HOURS")
     private String courseNumberHours;
+
+    @ManyToMany(mappedBy = "courses")
+    private List<Student> students;
 
     public Course() {
     }
@@ -84,5 +88,13 @@ public class Course {
 
     public void setCourseNumberHours(String courseNumberHours) {
         this.courseNumberHours = courseNumberHours;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }

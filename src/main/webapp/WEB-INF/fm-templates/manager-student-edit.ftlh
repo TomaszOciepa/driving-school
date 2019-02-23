@@ -62,6 +62,12 @@
                    class="form-control"
                    id="exampleInputDateRegistration" placeholder="date" disabled>
         </div>
+        <div class="form-group">
+            <label for="exampleInputCourse">Course</label>
+            <input value="${student.courses}" name="course" type="text"
+                   class="form-control"
+                   id="exampleInputCourse" placeholder="date" disabled>
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </#if>
