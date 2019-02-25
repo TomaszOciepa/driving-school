@@ -3,7 +3,9 @@ package servlet.manager;
 import authentication.CheckExists;
 import authentication.GenerateRandomPassword;
 import authentication.PasswordHashing;
+import date.dao.CourseDao;
 import date.dao.StudentDao;
+import date.model.Course;
 import date.model.Manager;
 import date.model.Student;
 import freemarker.TemplateProvider;
@@ -23,7 +25,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "/new-student")
@@ -44,6 +48,8 @@ public class NewStudentServlet extends HttpServlet {
     private SendMail mail;
     @Inject
     private StudentDao studentDao;
+    @Inject
+    private CourseDao courseDao;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -54,7 +60,11 @@ public class NewStudentServlet extends HttpServlet {
         Map<String, Object> model = new HashMap<>();
 
         Manager managerSession = (Manager) session.getAttribute("user");
+        List<Course> courseList = courseDao.findAll();
+
         model.put("user", managerSession);
+        model.put("courses", courseList);
+
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
     }
@@ -89,6 +99,11 @@ public class NewStudentServlet extends HttpServlet {
             newStudent.setStudentDateRegistration(LocalDate.now());
             String password = generateRandomPassword.generatePassword();
             newStudent.setStudentPassword(passwordHashing.generateHash(password));
+            int coursId = Integer.parseInt(req.getParameter("course"));
+            Course course =  courseDao.findById(coursId);
+            List<Course> courseList = new ArrayList<>();
+            courseList.add(0, course);
+            newStudent.setCourses(courseList);
             studentDao.save(newStudent);
             mail.sendMail(email, password);
             model.put("SuccesUpdate", "Added New Student");

@@ -28,7 +28,7 @@ public class Course {
     @Column(name = "COURSE_NUMBER_HOURS")
     private String courseNumberHours;
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER)
     private List<Student> students;
 
     public Course() {

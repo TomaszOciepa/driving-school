@@ -52,6 +52,16 @@
                     <input name="city" type="text" class="form-control" id="exampleInputCity"
                            placeholder="City" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="Select2">Wybierz Kurs</label>
+                    <select name="course" class="form-control" id="Select2">
+                        <option></option>
+                        <#list courses as c>
+                            <option value="${c.courseId}">${c.courseName}, <p>category: ${c.courseCatrgoryDriveLicense}</p></option>
+                        </#list>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
 

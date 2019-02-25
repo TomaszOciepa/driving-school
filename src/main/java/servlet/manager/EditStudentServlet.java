@@ -119,10 +119,10 @@ public class EditStudentServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-new-manager");
+            LOG.info("Load template manager-edit-student");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-new-manager");
+            LOG.warn("Failed load template manager-edit-student");
         }
     }
 }

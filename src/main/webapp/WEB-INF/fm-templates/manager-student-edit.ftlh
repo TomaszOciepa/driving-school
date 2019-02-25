@@ -62,14 +62,32 @@
                    class="form-control"
                    id="exampleInputDateRegistration" placeholder="date" disabled>
         </div>
-        <div class="form-group">
-            <label for="exampleInputCourse">Course</label>
-            <input value="${student.courses}" name="course" type="text"
-                   class="form-control"
-                   id="exampleInputCourse" placeholder="date" disabled>
-        </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
+    <table class="table">
+        <h1>Lista kursów</h1>
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Hours</th>
+            <th scope="col">Data Start</th>
+            <th scope="col">Data Finish</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list course as c>
+            <tr>
+                <td><h5>${c.courseName}</h5></td>
+                <td><h5>${c.courseCatrgoryDriveLicense}</h5></td>
+                <td><h5>${c.courseNumberHours}</h5></td>
+                <td><h5>${c.courseDataStart}</h5></td>
+                <td><h5>${c.courseDataFinish}</h5></td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
 </#if>
 
 </div>
