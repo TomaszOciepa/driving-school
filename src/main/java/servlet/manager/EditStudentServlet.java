@@ -2,6 +2,7 @@ package servlet.manager;
 
 import authentication.CheckExists;
 import date.dao.StudentDao;
+import date.model.Course;
 import date.model.Instructor;
 import date.model.Manager;
 import date.model.Student;
@@ -18,11 +19,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@Transactional
 @WebServlet(urlPatterns = "/edit-student")
 public class EditStudentServlet extends HttpServlet {
 
@@ -49,10 +53,10 @@ public class EditStudentServlet extends HttpServlet {
 
         int id = Integer.parseInt(req.getParameter("id"));
         Student editedStudent = studentDao.findById(id);
-
+        List<Course> courseList = editedStudent.getCourses();
         session.setAttribute("editedStudent", editedStudent);
         model.put("student", editedStudent);
-        model.put("course", editedStudent.getCourses());
+        model.put("course", courseList);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         loadTemplate(writer, model, template);

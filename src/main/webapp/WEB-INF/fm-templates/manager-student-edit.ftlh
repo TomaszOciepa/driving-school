@@ -68,7 +68,6 @@
         <h1>Lista kursów</h1>
         <thead>
         <tr>
-            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Category</th>
             <th scope="col">Hours</th>

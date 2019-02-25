@@ -4,6 +4,7 @@ package date.model;
 import javax.persistence.*;
 import java.util.List;
 
+
 @Entity
 @Table(name = "COURSE")
 public class Course {
