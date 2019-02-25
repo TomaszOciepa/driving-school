@@ -51,12 +51,8 @@ public class EditStudentServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
-        int id = Integer.parseInt(req.getParameter("id"));
-        Student editedStudent = studentDao.findById(id);
-        List<Course> courseList = editedStudent.getCourses();
-        session.setAttribute("editedStudent", editedStudent);
-        model.put("student", editedStudent);
-        model.put("course", courseList);
+        Student student = (Student) session.getAttribute("editedStudent");
+        model.put("student", student);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         loadTemplate(writer, model, template);
@@ -85,34 +81,43 @@ public class EditStudentServlet extends HttpServlet {
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
-        if (checkExists.checkStudentExists(email)) {
+        if (checkExists.checkManagerExists(email) || checkExists.checkInstructorExists(email)){
+            LOG.info("Email is already busy");
+                model.put("student", editedStudent);
+                model.put("FailedUpdate", "Email is already busy. Try again.");
+                loadTemplate(writer, model, template);
+        }else {
+            if (checkExists.checkStudentExists(email)) {
 
-            if (editedStudent.getStudentEmail().equals(email)){
+                if (editedStudent.getStudentEmail().equals(email)){
+                    updateStudent(editedStudent, email, name, lastName, phone, street, city, pesel);
+                    LOG.info("Student has bean update");
+                    model.put("student", editedStudent);
+                    model.put("SuccesUpdate", "Student has bean update");
+                    loadTemplate(writer, model, template);
+                }else {
+                    LOG.info("Email is already busy");
+                    model.put("student", editedStudent);
+                    model.put("FailedUpdate", "Email is already busy. Try again.");
+                    loadTemplate(writer, model, template);
+                }
+            } else {
                 updateStudent(editedStudent, email, name, lastName, phone, street, city, pesel);
                 LOG.info("Student has bean update");
                 model.put("student", editedStudent);
                 model.put("SuccesUpdate", "Student has bean update");
                 loadTemplate(writer, model, template);
-            }else {
-                LOG.info("Email is already busy");
-                model.put("student", editedStudent);
-                model.put("FailedUpdate", "Email is already busy. Try again.");
-                loadTemplate(writer, model, template);
             }
-        } else {
-            updateStudent(editedStudent, email, name, lastName, phone, street, city, pesel);
-            LOG.info("Student has bean update");
-            model.put("student", editedStudent);
-            model.put("SuccesUpdate", "Student has bean update");
-            loadTemplate(writer, model, template);
         }
+
+
 
 
     }
 
     private void updateStudent(Student editedStudent, String email, String name, String lastName, String phone, String street, String city, String pesel) {
         editedStudent.setStudentEmail(email);
-        editedStudent.setStudentEmail(name);
+        editedStudent.setStudentName(name);
         editedStudent.setStudentLastname(lastName);
         editedStudent.setStudentPhone(phone);
         editedStudent.setStudentStreet(street);
