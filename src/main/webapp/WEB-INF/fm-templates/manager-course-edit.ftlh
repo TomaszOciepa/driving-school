@@ -47,6 +47,24 @@
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
+
+    <table class="table">
+        <h1>Students list</h1>
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list students as s>
+            <tr>
+                <td><h5>${s.studentName}</h5></td>
+                <td><h5>${s.studentLastname}</h5></td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
 </#if>
 
 </div>

@@ -3,6 +3,7 @@ package servlet.manager;
 import date.dao.CourseDao;
 import date.model.Course;
 import date.model.Manager;
+import date.model.Student;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "edit-course")
@@ -46,9 +48,11 @@ public class EditCourseServlet extends HttpServlet {
 
         int id = Integer.parseInt(req.getParameter("id"));
         Course editedCourse = courseDao.findById(id);
+        List<Student> studentList = editedCourse.getStudents();
 
         session.setAttribute("editedCourse", editedCourse);
         model.put("course", editedCourse);
+        model.put("students", studentList);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
