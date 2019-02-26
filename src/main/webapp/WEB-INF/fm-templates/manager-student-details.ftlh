@@ -21,6 +21,10 @@
     </div>
     </div>
     <form method="get" action="/edit-student" class="padding">
+        <div class="padding">
+            <button type="submit" class="btn btn-primary">edit data</button>
+        </div>
+
         <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
             <input value="${student.studentEmail}" name="email" type="email" class="form-control"
@@ -62,10 +66,10 @@
                    class="form-control"
                    id="exampleInputDateRegistration" placeholder="date" disabled>
         </div>
-        <button type="submit" class="btn btn-primary">edit data</button>
     </form>
     <table class="table">
         <h1>Lista kursów</h1>
+        <a href="/add-course-to-student" class="btn btn-primary">Add course</a>
         <thead>
         <tr>
             <th scope="col">Name</th>
