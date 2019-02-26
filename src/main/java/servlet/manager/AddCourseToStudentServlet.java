@@ -50,30 +50,9 @@ public class AddCourseToStudentServlet extends HttpServlet {
         model.put("user", managerSession);
 
         Student student = (Student) session.getAttribute("editedStudent");
-        List<Course> listAllCoures = courseDao.findAll();
-
         model.put("student", student);
 
-        List<Course> listStudentCourse = student.getCourses();
-        List<Course> listCourse = new ArrayList<>();
-
-        listCourse.addAll(listAllCoures);
-
-        if (listStudentCourse.size() == 0){
-            model.put("courses", listCourse);
-        }else if (listStudentCourse.size() == listAllCoures.size()){
-            model.put("info", "the user is already registered for all courses");
-        } else {
-            for (int i = 0; i < listStudentCourse.size(); i++) {
-                for (int j = 0; j < listAllCoures.size(); j++) {
-                    if (listStudentCourse.get(i).getCourseId() == listAllCoures.get(j).getCourseId()) {
-                        Course course = listAllCoures.get(j);
-                        listCourse.remove(course);
-                    }
-                }
-            }
-            model.put("courses", listCourse);
-        }
+        checkWhatCoursesStudentHas(model, student);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
@@ -111,6 +90,31 @@ public class AddCourseToStudentServlet extends HttpServlet {
             template.process(model, writer);
         } catch (TemplateException e) {
             LOG.warn("Failed load template manager-edit-student");
+        }
+    }
+
+    private void checkWhatCoursesStudentHas(Map<String, Object> model, Student student) {
+        List<Course> listAllCoures = courseDao.findAll();
+
+        List<Course> listStudentCourse = student.getCourses();
+        List<Course> listCourse = new ArrayList<>();
+
+        listCourse.addAll(listAllCoures);
+
+        if (listStudentCourse.size() == 0){
+            model.put("courses", listCourse);
+        }else if (listStudentCourse.size() == listAllCoures.size()){
+            model.put("info", "the user is already registered for all courses");
+        } else {
+            for (int i = 0; i < listStudentCourse.size(); i++) {
+                for (int j = 0; j < listAllCoures.size(); j++) {
+                    if (listStudentCourse.get(i).getCourseId() == listAllCoures.get(j).getCourseId()) {
+                        Course course = listAllCoures.get(j);
+                        listCourse.remove(course);
+                    }
+                }
+            }
+            model.put("courses", listCourse);
         }
     }
 }
