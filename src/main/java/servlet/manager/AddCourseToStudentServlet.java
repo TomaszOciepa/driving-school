@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,27 @@ public class AddCourseToStudentServlet extends HttpServlet {
         List<Course> listAllCoures = courseDao.findAll();
 
         model.put("student", student);
-        model.put("courses", listAllCoures);
+
+        List<Course> listStudentCourse = student.getCourses();
+        List<Course> listCourse = new ArrayList<>();
+
+        listCourse.addAll(listAllCoures);
+
+        if (listStudentCourse.size() == 0){
+            model.put("courses", listCourse);
+        }else if (listStudentCourse.size() == listAllCoures.size()){
+            model.put("info", "the user is already registered for all courses");
+        } else {
+            for (int i = 0; i < listStudentCourse.size(); i++) {
+                for (int j = 0; j < listAllCoures.size(); j++) {
+                    if (listStudentCourse.get(i).getCourseId() == listAllCoures.get(j).getCourseId()) {
+                        Course course = listAllCoures.get(j);
+                        listCourse.remove(course);
+                    }
+                }
+            }
+            model.put("courses", listCourse);
+        }
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
@@ -79,6 +100,7 @@ public class AddCourseToStudentServlet extends HttpServlet {
         student.setCourses(listStudentCourse);
 
         studentDao.update(student);
+        model.put("student", student);
         model.put("SuccesUpdate", "Added New Course To Student");
         loadTemplate(writer, model, template);
     }
