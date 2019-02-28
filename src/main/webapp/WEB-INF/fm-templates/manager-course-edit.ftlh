@@ -50,6 +50,7 @@
 
     <table class="table">
         <h1>Students list</h1>
+        <a href="/add-student-to-course" class="btn btn-primary">Add Student</a>
         <thead>
         <tr>
             <th scope="col">Name</th>
