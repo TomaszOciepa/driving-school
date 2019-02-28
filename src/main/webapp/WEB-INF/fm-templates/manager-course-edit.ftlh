@@ -7,7 +7,7 @@
 <h1 class="display-4">Course Edit</h1>
 <#if SuccesUpdate ??>
     <div class="alert alert-success" role="alert">
-        ${SuccesUpdate} <a href="/edit-course?id=${course.courseId}">Return</a>
+        ${SuccesUpdate} <a href="/details-course?id=${course.courseId}">Return</a>
     </div>
     </div>
     </div>
@@ -48,24 +48,6 @@
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 
-    <table class="table">
-        <h1>Students list</h1>
-        <a href="/add-student-to-course" class="btn btn-primary">Add Student</a>
-        <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Last Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        <#list students as s>
-            <tr>
-                <td><h5>${s.studentName}</h5></td>
-                <td><h5>${s.studentLastname}</h5></td>
-            </tr>
-        </#list>
-        </tbody>
-    </table>
 </#if>
 
 </div>

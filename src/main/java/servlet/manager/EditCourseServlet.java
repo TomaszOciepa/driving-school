@@ -46,11 +46,8 @@ public class EditCourseServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
-        int id = Integer.parseInt(req.getParameter("id"));
-        Course editedCourse = courseDao.findById(id);
-        List<Student> studentList = editedCourse.getStudents();
-
-        session.setAttribute("editedCourse", editedCourse);
+       Course editedCourse = (Course) session.getAttribute("editedCourse");
+       List<Student> studentList = editedCourse.getStudents();
         model.put("course", editedCourse);
         model.put("students", studentList);
 

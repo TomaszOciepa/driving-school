@@ -68,7 +68,7 @@
         </div>
     </form>
     <table class="table">
-        <h1>Lista kursów</h1>
+        <h1>List courses</h1>
         <a href="/add-course-to-student" class="btn btn-primary">Add course</a>
         <a href="/delete-course-to-student" class="btn btn-danger">Delete course</a>
         <thead>
