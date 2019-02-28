@@ -50,13 +50,39 @@ public class AddStudentToCourseServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
-        Course editedCourse = (Course) session.getAttribute("editedCourse");
-        model.put("course", editedCourse);
+        Course course = (Course) session.getAttribute("editedCourse");
+        model.put("course", course);
 
-        checkWhatStudentsHaveCourse(model, editedCourse);
+        checkWhatStudentsHaveCourse(model, course);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         loadTemplate(writer, model, template);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        final PrintWriter writer = resp.getWriter();
+        HttpSession session = req.getSession(true);
+
+        Map<String, Object> model = new HashMap<>();
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
+
+        Manager managerSession = (Manager) session.getAttribute("user");
+        model.put("user", managerSession);
+
+        Course course = (Course) session.getAttribute("editedCourse");
+
+        int studentId = Integer.parseInt(req.getParameter("student"));
+        Student newStudent = studentDao.findById(studentId);
+        course.getStudents().add(newStudent);
+
+        courseDao.update(course);
+
+        model.put("course", course);
+        model.put("SuccesUpdate", "Added New Student To Course");
+        loadTemplate(writer, model, template);
+
     }
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {

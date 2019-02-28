@@ -7,7 +7,7 @@
 <h1 class="display-4">Course add Student</h1>
 <#if SuccesUpdate ??>
     <div class="alert alert-success" role="alert">
-        ${SuccesUpdate} <a href="/details-student?id=${course.courseId}">Return</a>
+        ${SuccesUpdate} <a href="/details-course?id=${course.courseId}">Return</a>
     </div>
     </div>
     </div>
@@ -20,7 +20,7 @@
 <#else>
     </div>
     </div>
-    <form method="post" action="/add-course-to-student" class="padding">
+    <form method="post" action="/add-student-to-course" class="padding">
         <div class="form-group">
             <label for="exampleInputName">Name</label>
             <input value="${course.courseName}" name="name" type="text" class="form-control"
@@ -33,12 +33,12 @@
         </div>
         <#if info ??>
             <div class="alert alert-danger" role="alert">
-                ${info}. <a href="/details-student?id=${course.courseId}">Return</a>
+                ${info}. <a href="/details-course?id=${course.courseId}">Return</a>
             </div>
         <#else>
             <div class="form-group">
                 <label for="Select2">Choose Students</label>
-                <select name="course" class="form-control" id="Select2">
+                <select name="student" class="form-control" id="Select2">
                     <option></option>
                     <#list students as s>
                         <option value="${s.studentId}">${s.studentEmail}, <p>name: ${s.studentName} lastname: ${s.studentLastname}</p>
