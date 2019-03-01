@@ -1,7 +1,6 @@
 package servlet.manager;
 
 import date.dao.CourseDao;
-import date.dao.StudentDao;
 import date.model.Course;
 import date.model.Manager;
 import date.model.Student;
@@ -18,27 +17,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/add-student-to-course")
-public class AddStudentToCourseServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/delete-student-to-course")
+public class DeleteStudentToCourseServlet extends HttpServlet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AddStudentToCourseServlet.class);
-    private static final String TEMPLATE_NAME = "manager-course-add-student";
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteStudentToCourseServlet.class);
+    private static final String TEMPLATE_NAME = "manager-course-delete-student";
 
     @Inject
     private TemplateProvider templateProvider;
     @Inject
-    private StudentDao studentDao;
-    @Inject
     private CourseDao courseDao;
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -51,10 +45,12 @@ public class AddStudentToCourseServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
-        Course course = (Course) session.getAttribute("editedCourse");
-        model.put("course", course);
+        Course editedCourse = (Course) session.getAttribute("editedCourse");
+        List<Student> studentList = editedCourse.getStudents();
 
-        checkWhatStudentsHaveCourse(model, course);
+        model.put("students", studentList);
+        model.put("course", editedCourse);
+
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         loadTemplate(writer, model, template);
@@ -71,53 +67,29 @@ public class AddStudentToCourseServlet extends HttpServlet {
 
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
-        Course course = (Course) session.getAttribute("editedCourse");
-
+        
+        Course editedCourse = (Course) session.getAttribute("editedCourse");
         int studentId = Integer.parseInt(req.getParameter("student"));
-        Student newStudent = studentDao.findById(studentId);
-        List<Student> studentList = course.getStudents();
-        studentList.add(newStudent);
-        course.setStudents(studentList);
 
-        courseDao.update(course);
+        List<Student> studentList = editedCourse.getStudents();
 
-        model.put("course", course);
-        model.put("SuccesUpdate", "Added New Student To Course");
+        for (int i = 0; i < studentList.size(); i++) {
+            if (studentList.get(i).getStudentId() == studentId) {
+                studentList.remove(i);
+                editedCourse.setStudents(studentList);
+                courseDao.update(editedCourse);
+                model.put("SuccesUpdate", "Delete Student for Course");
+            }
+        }
         loadTemplate(writer, model, template);
-
     }
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-student-add-course");
+            LOG.info("Load template manager-student-delete-course");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-student-add-course");
-        }
-    }
-
-    private void checkWhatStudentsHaveCourse(Map<String, Object> model, Course editedCourse) {
-        List<Student> listAllStudents = studentDao.findAll();
-        List<Student> listCourseStudents = editedCourse.getStudents();
-        List<Student> listStudents = new ArrayList<>();
-
-        listStudents.addAll(listAllStudents);
-
-        if(listCourseStudents.size() == 0){
-            model.put("students", listStudents);
-        }else if (listCourseStudents.size() == listAllStudents.size()){
-            model.put("info", "All students are enrolled in this course");
-        }else {
-            for (int i = 0; i < listCourseStudents.size(); i++) {
-                for (int j = 0; j < listAllStudents.size(); j++) {
-                    if (listCourseStudents.get(i).getStudentId() == listAllStudents.get(j).getStudentId()){
-                        Student student = listAllStudents.get(j);
-                        listStudents.remove(student);
-                    }
-                }
-            }
-            model.put("students", listStudents);
+            LOG.warn("Failed load template manager-student-delete-course");
         }
     }
 }
