@@ -79,6 +79,7 @@ public class DeleteStudentToCourseServlet extends HttpServlet {
                 editedCourse.setStudents(studentList);
                 courseDao.update(editedCourse);
                 model.put("SuccesUpdate", "Delete Student for Course");
+                model.put("course", editedCourse);
             }
         }
         loadTemplate(writer, model, template);
