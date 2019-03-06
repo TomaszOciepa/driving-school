@@ -2,6 +2,7 @@ package servlet.manager;
 
 import date.dao.StudentDao;
 import date.model.Course;
+import date.model.Instructor;
 import date.model.Manager;
 import date.model.Student;
 import freemarker.TemplateProvider;
@@ -50,9 +51,11 @@ public class DetailsStudentServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         Student editedStudent = studentDao.findById(id);
         List<Course> courseList = editedStudent.getCourses();
+        List<Instructor> instructorList = editedStudent.getInstructors();
         session.setAttribute("editedStudent", editedStudent);
         model.put("student", editedStudent);
         model.put("course", courseList);
+        model.put("instructor", instructorList);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         try {

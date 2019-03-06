@@ -20,7 +20,7 @@
 <#else>
     </div>
     </div>
-    <form method="post" action="/add-course-to-student" class="padding">
+    <form method="post" action="/add-instructor-to-student" class="padding">
         <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
             <input value="${student.studentEmail}" name="email" type="email" class="form-control"
@@ -42,16 +42,16 @@
             </div>
         <#else>
             <div class="form-group">
-                <label for="Select2">Choose a course</label>
+                <label for="Select2">Choose a Instructor</label>
                 <select name="course" class="form-control" id="Select2">
                     <option></option>
-                    <#list courses as c>
-                        <option value="${c.courseId}">${c.courseName}, <p>category: ${c.courseCatrgoryDriveLicense}</p></option>
+                    <#list instructor as i>
+                        <option value="${i.instructorId}">${i.instructorName} ${i.instructorLastname}</option>
                     </#list>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
-       </#if>
+        </#if>
 
     </form>
 </#if>

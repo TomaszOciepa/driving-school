@@ -68,6 +68,25 @@
         </div>
     </form>
     <table class="table">
+        <h1>List Instructors</h1>
+        <a href="/add-instructor-to-student" class="btn btn-primary">Add Instructor</a>
+        <a href="/delete-course-to-student" class="btn btn-danger">Delete Instructor</a>
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list instructor as i>
+            <tr>
+                <td><h5>${i.instructorName}</h5></td>
+                <td><h5>${i.instructorLastname}</h5></td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+    <table class="table">
         <h1>List courses</h1>
         <a href="/add-course-to-student" class="btn btn-primary">Add course</a>
         <a href="/delete-course-to-student" class="btn btn-danger">Delete course</a>

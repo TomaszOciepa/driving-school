@@ -3,6 +3,7 @@ package date.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "INSTRUCTOR")
@@ -41,10 +42,13 @@ public class Instructor {
     @Column(name = "INSTRUCTOR_DATE_REGISTRATION")
     private LocalDate instructorDateRegistration;
 
+    @ManyToMany(mappedBy = "instructors", fetch = FetchType.EAGER)
+    private List<Student> students;
+
     public Instructor() {
     }
 
-    public Instructor(int instructorRole, String instructorEmail, String instructorPassword, String instructorName, String instructorLastname, String instructorPhone, String instructorStreet, String instructorCity, LocalDate instructorDateRegistration) {
+    public Instructor(int instructorRole, String instructorEmail, String instructorPassword, String instructorName, String instructorLastname, String instructorPhone, String instructorStreet, String instructorCity, LocalDate instructorDateRegistration, List<Student> students) {
         this.instructorRole = instructorRole;
         this.instructorEmail = instructorEmail;
         this.instructorPassword = instructorPassword;
@@ -54,6 +58,7 @@ public class Instructor {
         this.instructorStreet = instructorStreet;
         this.instructorCity = instructorCity;
         this.instructorDateRegistration = instructorDateRegistration;
+        this.students = students;
     }
 
     public int getInstructorId() {
@@ -134,5 +139,13 @@ public class Instructor {
 
     public void setInstructorDateRegistration(LocalDate instructorDateRegistration) {
         this.instructorDateRegistration = instructorDateRegistration;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }

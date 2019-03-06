@@ -56,10 +56,17 @@ public class Student {
             uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "course_id"}))
     private List<Course> courses;
 
+    @ManyToMany
+    @JoinTable(name = "STUDENTS_TO_INSTRUCTORS",
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "STUDENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "instructor_Id", referencedColumnName = "INSTRUCTOR_ID"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "instructor_Id"}))
+    private List<Instructor> instructors;
+
     public Student() {
     }
 
-    public Student(int studentRole, String studentEmail, String studentPassword, String studentName, String studentLastname, String studentPESEL, String studentPhone, String studentStatus, String studentCity, String studentStreet, LocalDate studentDateRegistration) {
+    public Student(int studentRole, String studentEmail, String studentPassword, String studentName, String studentLastname, String studentPESEL, String studentPhone, String studentStatus, String studentCity, String studentStreet, LocalDate studentDateRegistration, List<Course> courses, List<Instructor> instructors) {
         this.studentRole = studentRole;
         this.studentEmail = studentEmail;
         this.studentPassword = studentPassword;
@@ -71,6 +78,8 @@ public class Student {
         this.studentCity = studentCity;
         this.studentStreet = studentStreet;
         this.studentDateRegistration = studentDateRegistration;
+        this.courses = courses;
+        this.instructors = instructors;
     }
 
     public int getStudentId() {
@@ -175,5 +184,13 @@ public class Student {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public List<Instructor> getInstructors() {
+        return instructors;
+    }
+
+    public void setInstructors(List<Instructor> instructors) {
+        this.instructors = instructors;
     }
 }
