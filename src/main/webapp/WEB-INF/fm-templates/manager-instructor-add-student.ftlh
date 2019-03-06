@@ -43,7 +43,7 @@
         <#else>
             <div class="form-group">
                 <label for="Select2">Choose a Instructor</label>
-                <select name="course" class="form-control" id="Select2">
+                <select name="instructor" class="form-control" id="Select2">
                     <option></option>
                     <#list instructor as i>
                         <option value="${i.instructorId}">${i.instructorName} ${i.instructorLastname}</option>

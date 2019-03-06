@@ -38,8 +38,6 @@ public class AddInstructorToStudentServlet extends HttpServlet {
     @Inject
     private StudentDao studentDao;
     @Inject
-    private CourseDao courseDao;
-    @Inject
     private InstructorDao instructorDao;
 
     @Override
@@ -64,6 +62,31 @@ public class AddInstructorToStudentServlet extends HttpServlet {
 
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        final PrintWriter writer = resp.getWriter();
+        HttpSession session = req.getSession(true);
+
+        Map<String, Object> model = new HashMap<>();
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
+
+        Manager managerSession = (Manager) session.getAttribute("user");
+        model.put("user", managerSession);
+
+        Student student = (Student) session.getAttribute("editedStudent");
+        int instructorId = Integer.parseInt(req.getParameter("instructor"));
+        Instructor instructor = instructorDao.findById(instructorId);
+        List<Instructor> instructorList = student.getInstructors();
+        instructorList.add(instructor);
+        student.setInstructors(instructorList);
+        studentDao.update(student);
+        model.put("student", student);
+        model.put("SuccesUpdate", "Added New Instructor To Student");
+        loadTemplate(writer, model, template);
+
+    }
+
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
             LOG.info("Load template manager-student-add-course");
@@ -82,9 +105,9 @@ public class AddInstructorToStudentServlet extends HttpServlet {
 
         listInstructors.addAll(listAllInstructors);
 
-        if (listStudentInstructors.size() == 0){
+        if (listStudentInstructors.size() == 0) {
             model.put("instructor", listInstructors);
-        }else if (listStudentInstructors.size() == listAllInstructors.size()){
+        } else if (listStudentInstructors.size() == listAllInstructors.size()) {
             model.put("info", "the user is already registered for all courses");
         } else {
             for (int i = 0; i < listStudentInstructors.size(); i++) {
