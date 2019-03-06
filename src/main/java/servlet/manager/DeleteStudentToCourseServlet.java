@@ -1,6 +1,7 @@
 package servlet.manager;
 
 import date.dao.CourseDao;
+import date.dao.StudentDao;
 import date.model.Course;
 import date.model.Manager;
 import date.model.Student;
@@ -17,12 +18,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Transactional
 @WebServlet(urlPatterns = "/delete-student-to-course")
 public class DeleteStudentToCourseServlet extends HttpServlet {
 
@@ -33,6 +36,8 @@ public class DeleteStudentToCourseServlet extends HttpServlet {
     private TemplateProvider templateProvider;
     @Inject
     private CourseDao courseDao;
+    @Inject
+    private StudentDao studentDao;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -70,14 +75,16 @@ public class DeleteStudentToCourseServlet extends HttpServlet {
         
         Course editedCourse = (Course) session.getAttribute("editedCourse");
         int studentId = Integer.parseInt(req.getParameter("student"));
+        Student studentDeleteCourse = studentDao.findById(studentId);
 
-        List<Student> studentList = editedCourse.getStudents();
+        List<Course> courseList = studentDeleteCourse.getCourses();
+        int idCoureDelete = editedCourse.getCourseId();
 
-        for (int i = 0; i < studentList.size(); i++) {
-            if (studentList.get(i).getStudentId() == studentId) {
-                studentList.remove(i);
-                editedCourse.setStudents(studentList);
-                courseDao.update(editedCourse);
+        for (int i = 0; i < courseList.size(); i++) {
+            if (courseList.get(i).getCourseId() == idCoureDelete) {
+                courseList.remove(i);
+                studentDeleteCourse.setCourses(courseList);
+                studentDao.update(studentDeleteCourse);
                 model.put("SuccesUpdate", "Delete Student for Course");
                 model.put("course", editedCourse);
             }

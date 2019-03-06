@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Transactional
 @WebServlet(urlPatterns = "/add-student-to-course")
 public class AddStudentToCourseServlet extends HttpServlet {
 
@@ -76,11 +77,10 @@ public class AddStudentToCourseServlet extends HttpServlet {
 
         int studentId = Integer.parseInt(req.getParameter("student"));
         Student newStudent = studentDao.findById(studentId);
-        List<Student> studentList = course.getStudents();
-        studentList.add(newStudent);
-        course.setStudents(studentList);
-
-        courseDao.update(course);
+        List<Course> courseList = newStudent.getCourses();
+        courseList.add(course);
+        newStudent.setCourses(courseList);
+        studentDao.update(newStudent);
 
         model.put("course", course);
         model.put("SuccesUpdate", "Added New Student To Course");
