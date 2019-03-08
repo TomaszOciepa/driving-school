@@ -70,7 +70,7 @@
     <table class="table">
         <h1>List Instructors</h1>
         <a href="/add-instructor-to-student" class="btn btn-primary">Add Instructor</a>
-        <a href="/delete-course-to-student" class="btn btn-danger">Delete Instructor</a>
+        <a href="/delete-instructor-to-student" class="btn btn-danger">Delete Instructor</a>
         <thead>
         <tr>
             <th scope="col">Name</th>
