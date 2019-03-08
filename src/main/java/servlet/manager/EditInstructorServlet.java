@@ -46,10 +46,7 @@ public class EditInstructorServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
-        int id = Integer.parseInt(req.getParameter("id"));
-        Instructor editedInstructor = instructorDao.findById(id);
-
-        session.setAttribute("editedInstructor", editedInstructor);
+        Instructor editedInstructor = (Instructor) session.getAttribute("editedInstructor");
         model.put("instructor", editedInstructor);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
