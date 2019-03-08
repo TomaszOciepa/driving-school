@@ -31,7 +31,7 @@ import java.util.Map;
 public class AddInstructorToStudentServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(AddInstructorToStudentServlet.class);
-    private static final String TEMPLATE_NAME = "manager-instructor-add-student";
+    private static final String TEMPLATE_NAME = "manager-student-add-instructor";
 
     @Inject
     private TemplateProvider templateProvider;

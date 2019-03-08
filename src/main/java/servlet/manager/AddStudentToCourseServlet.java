@@ -37,8 +37,6 @@ public class AddStudentToCourseServlet extends HttpServlet {
     private TemplateProvider templateProvider;
     @Inject
     private StudentDao studentDao;
-    @Inject
-    private CourseDao courseDao;
 
 
     @Override
