@@ -1,8 +1,7 @@
 package servlet.manager;
 
-import date.dao.CourseDao;
 import date.dao.StudentDao;
-import date.model.Course;
+import date.model.Instructor;
 import date.model.Manager;
 import date.model.Student;
 import freemarker.TemplateProvider;
@@ -26,11 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 @Transactional
-@WebServlet(urlPatterns = "/delete-student-to-course")
-public class DeleteStudentToCourseServlet extends HttpServlet {
+@WebServlet(urlPatterns = "delete-student-to-instructor")
+public class DeleteStudentToInstructorServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeleteStudentToCourseServlet.class);
-    private static final String TEMPLATE_NAME = "manager-course-delete-student";
+    private static final String TEMPLATE_NAME = "manager-instructor-delete-student";
 
     @Inject
     private TemplateProvider templateProvider;
@@ -48,15 +47,15 @@ public class DeleteStudentToCourseServlet extends HttpServlet {
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
-        Course editedCourse = (Course) session.getAttribute("editedCourse");
-        List<Student> studentList = editedCourse.getStudents();
+        Instructor editedInstructor = (Instructor) session.getAttribute("editedInstructor");
+        List<Student> studentList = editedInstructor.getStudents();
 
+        model.put("instructor", editedInstructor);
         model.put("students", studentList);
-        model.put("course", editedCourse);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
+
     }
 
     @Override
@@ -70,21 +69,21 @@ public class DeleteStudentToCourseServlet extends HttpServlet {
 
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-        
-        Course editedCourse = (Course) session.getAttribute("editedCourse");
+
+        Instructor editedInstructor = (Instructor) session.getAttribute("editedInstructor");
         int studentId = Integer.parseInt(req.getParameter("student"));
-        Student studentDeleteCourse = studentDao.findById(studentId);
+        Student studentDeleteInstructor = studentDao.findById(studentId);
 
-        List<Course> courseList = studentDeleteCourse.getCourses();
-        int idCoureDelete = editedCourse.getCourseId();
+        List<Instructor> instructorList = studentDeleteInstructor.getInstructors();
+        int idInstructorDelete = editedInstructor.getInstructorId();
 
-        for (int i = 0; i < courseList.size(); i++) {
-            if (courseList.get(i).getCourseId() == idCoureDelete) {
-                courseList.remove(i);
-                studentDeleteCourse.setCourses(courseList);
-                studentDao.update(studentDeleteCourse);
-                model.put("SuccesUpdate", "Delete Student for Course");
-                model.put("course", editedCourse);
+        for (int i = 0; i < instructorList.size(); i++) {
+            if (instructorList.get(i).getInstructorId() == idInstructorDelete) {
+                instructorList.remove(i);
+                studentDeleteInstructor.setInstructors(instructorList);
+                studentDao.update(studentDeleteInstructor);
+                model.put("SuccesUpdate", "Delete Student for Instructor");
+                model.put("instructor", editedInstructor);
             }
         }
         loadTemplate(writer, model, template);

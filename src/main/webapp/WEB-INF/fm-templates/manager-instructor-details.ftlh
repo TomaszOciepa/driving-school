@@ -62,7 +62,7 @@
     <table class="table">
         <h1>Students list</h1>
         <a href="/add-student-to-instructor" class="btn btn-primary">Add Student</a>
-        <a href="/delete-student-to-course" class="btn btn-danger">Delete Student</a>
+        <a href="/delete-student-to-instructor" class="btn btn-danger">Delete Student</a>
         <thead>
         <tr>
             <th scope="col">Name</th>
