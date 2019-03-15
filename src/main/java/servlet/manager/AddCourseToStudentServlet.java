@@ -45,17 +45,14 @@ public class AddCourseToStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Student student = (Student) session.getAttribute("editedStudent");
         model.put("student", student);
 
         checkWhatCoursesStudentHas(model, student);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
     }
 
@@ -95,15 +92,13 @@ public class AddCourseToStudentServlet extends HttpServlet {
 
     private void checkWhatCoursesStudentHas(Map<String, Object> model, Student student) {
         List<Course> listAllCoures = courseDao.findAll();
-
         List<Course> listStudentCourse = student.getCourses();
         List<Course> listCourse = new ArrayList<>();
-
         listCourse.addAll(listAllCoures);
 
-        if (listStudentCourse.size() == 0){
+        if (listStudentCourse.size() == 0) {
             model.put("courses", listCourse);
-        }else if (listStudentCourse.size() == listAllCoures.size()){
+        } else if (listStudentCourse.size() == listAllCoures.size()) {
             model.put("info", "the user is already registered for all courses");
         } else {
             for (int i = 0; i < listStudentCourse.size(); i++) {

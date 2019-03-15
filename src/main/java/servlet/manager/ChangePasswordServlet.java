@@ -25,11 +25,8 @@ public class ChangePasswordServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(ChangePasswordServlet.class);
     private static final String TEMPLATE_NAME = "manager-change-password";
-
     @Inject
     private TemplateProvider templateProvider;
-    @Inject
-    private ManagerDao managerDao;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,10 +35,8 @@ public class ChangePasswordServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 

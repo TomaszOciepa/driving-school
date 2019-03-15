@@ -24,7 +24,6 @@ import java.util.Map;
 public class DeleteCourseServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(DeleteCourseServlet.class);
     private static final String TEMPLATE_NAME = "manager-course-delete";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -38,16 +37,13 @@ public class DeleteCourseServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         int id = Integer.parseInt(req.getParameter("id"));
         courseDao.delete(id);
-
         model.put("SuccesUpdate", "Manager account deleted");
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         try {
             template.process(model, writer);
         } catch (TemplateException e) {

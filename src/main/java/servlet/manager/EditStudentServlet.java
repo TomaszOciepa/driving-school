@@ -32,7 +32,6 @@ public class EditStudentServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditStudentServlet.class);
     private static final String TEMPLATE_NAME = "manager-student-edit";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -47,16 +46,13 @@ public class EditStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Student student = (Student) session.getAttribute("editedStudent");
         model.put("student", student);
+
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
-
     }
 
     @Override
@@ -66,10 +62,8 @@ public class EditStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Student editedStudent = (Student) session.getAttribute("editedStudent");
         String email = req.getParameter("email");
         String name = req.getParameter("name");
@@ -81,21 +75,21 @@ public class EditStudentServlet extends HttpServlet {
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
-        if (checkExists.checkManagerExists(email) || checkExists.checkInstructorExists(email)){
+        if (checkExists.checkManagerExists(email) || checkExists.checkInstructorExists(email)) {
             LOG.info("Email is already busy");
-                model.put("student", editedStudent);
-                model.put("FailedUpdate", "Email is already busy. Try again.");
-                loadTemplate(writer, model, template);
-        }else {
+            model.put("student", editedStudent);
+            model.put("FailedUpdate", "Email is already busy. Try again.");
+            loadTemplate(writer, model, template);
+        } else {
             if (checkExists.checkStudentExists(email)) {
 
-                if (editedStudent.getStudentEmail().equals(email)){
+                if (editedStudent.getStudentEmail().equals(email)) {
                     updateStudent(editedStudent, email, name, lastName, phone, street, city, pesel);
                     LOG.info("Student has bean update");
                     model.put("student", editedStudent);
                     model.put("SuccesUpdate", "Student has bean update");
                     loadTemplate(writer, model, template);
-                }else {
+                } else {
                     LOG.info("Email is already busy");
                     model.put("student", editedStudent);
                     model.put("FailedUpdate", "Email is already busy. Try again.");
@@ -109,8 +103,6 @@ public class EditStudentServlet extends HttpServlet {
                 loadTemplate(writer, model, template);
             }
         }
-
-
 
 
     }
@@ -128,10 +120,10 @@ public class EditStudentServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-edit-student");
+            LOG.info("Load template manager-student-edit");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-edit-student");
+            LOG.warn("Failed load template manager-student-edit");
         }
     }
 }

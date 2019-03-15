@@ -28,9 +28,8 @@ import java.util.Map;
 @WebServlet(urlPatterns = "delete-student-to-instructor")
 public class DeleteStudentToInstructorServlet extends HttpServlet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DeleteStudentToCourseServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteStudentToInstructorServlet.class);
     private static final String TEMPLATE_NAME = "manager-instructor-delete-student";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -43,19 +42,15 @@ public class DeleteStudentToInstructorServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Instructor editedInstructor = (Instructor) session.getAttribute("editedInstructor");
         List<Student> studentList = editedInstructor.getStudents();
-
         model.put("instructor", editedInstructor);
         model.put("students", studentList);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
-
     }
 
     @Override
@@ -65,15 +60,11 @@ public class DeleteStudentToInstructorServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Instructor editedInstructor = (Instructor) session.getAttribute("editedInstructor");
         int studentId = Integer.parseInt(req.getParameter("student"));
         Student studentDeleteInstructor = studentDao.findById(studentId);
-
         List<Instructor> instructorList = studentDeleteInstructor.getInstructors();
         int idInstructorDelete = editedInstructor.getInstructorId();
 
@@ -86,15 +77,16 @@ public class DeleteStudentToInstructorServlet extends HttpServlet {
                 model.put("instructor", editedInstructor);
             }
         }
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
     }
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-student-delete-course");
+            LOG.info("Load template manager-instructor-delete-student");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-student-delete-course");
+            LOG.warn("Failed load template manager-instructor-delete-student");
         }
     }
 }

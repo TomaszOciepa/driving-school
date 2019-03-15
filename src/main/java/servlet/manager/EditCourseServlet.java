@@ -28,7 +28,6 @@ public class EditCourseServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditCourseServlet.class);
     private static final String TEMPLATE_NAME = "manager-course-edit";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -42,17 +41,14 @@ public class EditCourseServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
        Course editedCourse = (Course) session.getAttribute("editedCourse");
        List<Student> studentList = editedCourse.getStudents();
         model.put("course", editedCourse);
         model.put("students", studentList);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
     }
 
@@ -63,25 +59,20 @@ public class EditCourseServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Course editedCourse = (Course) session.getAttribute("editedCourse");
-
         editedCourse.setCourseName(req.getParameter("name"));
         editedCourse.setCourseDataStart(req.getParameter("dateStart"));
         editedCourse.setCourseDataFinish(req.getParameter("dateFinish"));
         editedCourse.setCourseCatrgoryDriveLicense(req.getParameter("category"));
         editedCourse.setCourseNumberHours(req.getParameter("hours"));
-
         courseDao.update(editedCourse);
         model.put("course", editedCourse);
-
         model.put("SuccesUpdate", "Course has bean update");
+
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
-
     }
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {

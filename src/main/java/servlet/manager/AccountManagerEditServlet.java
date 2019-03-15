@@ -42,11 +42,10 @@ public class AccountManagerEditServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MY_ACCOUNT_EDIT);
 
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MY_ACCOUNT_EDIT);
         loadTemplate(writer, model, template);
     }
 
@@ -54,11 +53,12 @@ public class AccountManagerEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=UTF-8");
         final PrintWriter writer = resp.getWriter();
-        Map<String, Object> model = new HashMap<>();
 
+        Map<String, Object> model = new HashMap<>();
         HttpSession session = req.getSession(true);
         Manager sessionUser = (Manager) session.getAttribute("user");
         model.put("user", sessionUser);
+
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_MY_ACCOUNT);
 
         if (sessionUser.getManagerEmail().equals(req.getParameter("email"))) {
@@ -103,6 +103,4 @@ public class AccountManagerEditServlet extends HttpServlet {
             LOG.warn("Failed load template manager-my-account-edit");
         }
     }
-
-
 }

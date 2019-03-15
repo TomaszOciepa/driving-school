@@ -58,17 +58,14 @@ public class NewStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         List<Course> courseList = courseDao.findAll();
-
         model.put("user", managerSession);
         model.put("courses", courseList);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -80,7 +77,6 @@ public class NewStudentServlet extends HttpServlet {
         Manager sessionUser = (Manager) session.getAttribute("user");
         model.put("user", sessionUser);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         String email = req.getParameter("email");
 
         if (checkExistsEmail(req.getParameter("email"))) {
@@ -100,7 +96,7 @@ public class NewStudentServlet extends HttpServlet {
             String password = generateRandomPassword.generatePassword();
             newStudent.setStudentPassword(passwordHashing.generateHash(password));
             int coursId = Integer.parseInt(req.getParameter("course"));
-            Course course =  courseDao.findById(coursId);
+            Course course = courseDao.findById(coursId);
             List<Course> courseList = new ArrayList<>();
             courseList.add(0, course);
             newStudent.setCourses(courseList);

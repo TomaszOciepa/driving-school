@@ -1,6 +1,5 @@
 package servlet.manager;
 
-import date.dao.InstructorDao;
 import date.dao.StudentDao;
 import date.model.Manager;
 import freemarker.TemplateProvider;
@@ -26,7 +25,6 @@ public class DeleteStudentServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeleteStudentServlet.class);
     private static final String TEMPLATE_NAME = "manager-student-delete";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -39,16 +37,13 @@ public class DeleteStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         int id = Integer.parseInt(req.getParameter("id"));
         studentDao.delete(id);
-
         model.put("SuccesUpdate", "Students account deleted");
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         try {
             template.process(model, writer);
         } catch (TemplateException e) {

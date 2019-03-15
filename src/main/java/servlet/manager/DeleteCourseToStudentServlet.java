@@ -28,7 +28,6 @@ public class DeleteCourseToStudentServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeleteCourseToStudentServlet.class);
     private static final String TEMPLATE_NAME = "manager-student-delete-course";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -41,17 +40,14 @@ public class DeleteCourseToStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Student student = (Student) session.getAttribute("editedStudent");
         List<Course> listCourseStudent = student.getCourses();
         model.put("student", student);
         model.put("courses", listCourseStudent);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
     }
 
@@ -62,30 +58,23 @@ public class DeleteCourseToStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         Manager managerSession = (Manager) session.getAttribute("user");
         Student student = (Student) session.getAttribute("editedStudent");
-
         model.put("user", managerSession);
         model.put("student", student);
 
-
         int coursId = Integer.parseInt(req.getParameter("course"));
-
         List<Course> listStudentCourses = student.getCourses();
 
-
-        for (int i = 0; i < listStudentCourses.size(); i++){
-            if (listStudentCourses.get(i).getCourseId() == coursId ){
+        for (int i = 0; i < listStudentCourses.size(); i++) {
+            if (listStudentCourses.get(i).getCourseId() == coursId) {
                 listStudentCourses.remove(i);
                 student.setCourses(listStudentCourses);
                 studentDao.update(student);
                 model.put("SuccesUpdate", "Delete Course for Student");
-
             }
         }
-
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
     }
 

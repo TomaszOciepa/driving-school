@@ -29,7 +29,6 @@ import java.util.Map;
 public class NewManagerServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(NewManagerServlet.class);
     private static final String TEMPLATE_NAME = "manager-new-manager";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -51,13 +50,11 @@ public class NewManagerServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
+
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
-
 
     }
 
@@ -66,7 +63,6 @@ public class NewManagerServlet extends HttpServlet {
         resp.setContentType("text/html;charset=UTF-8");
         final PrintWriter writer = resp.getWriter();
         Map<String, Object> model = new HashMap<>();
-
         HttpSession session = req.getSession(true);
         Manager sessionUser = (Manager) session.getAttribute("user");
         model.put("user", sessionUser);
@@ -92,7 +88,6 @@ public class NewManagerServlet extends HttpServlet {
             model.put("SuccesUpdate", "Added New Manager");
             loadTemplate(writer, model, template);
         }
-
     }
 
     private boolean checkExistsEmail(String email) {

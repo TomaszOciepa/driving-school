@@ -24,7 +24,6 @@ public class MenuManagerServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(MenuManagerServlet.class);
     private static final String TEMPLATE_NAME = "manager-start";
-
     @Inject
     private TemplateProvider templateProvider;
 
@@ -35,12 +34,10 @@ public class MenuManagerServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         try {
             template.process(model, writer);
         } catch (TemplateException e) {

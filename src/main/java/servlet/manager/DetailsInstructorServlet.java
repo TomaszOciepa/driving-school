@@ -1,7 +1,6 @@
 package servlet.manager;
 
 import date.dao.InstructorDao;
-import date.dao.StudentDao;
 import date.model.Instructor;
 import date.model.Manager;
 import date.model.Student;
@@ -26,13 +25,12 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = "details-instructor")
 public class DetailsInstructorServlet extends HttpServlet {
-    private static final Logger LOG = LoggerFactory.getLogger(DetailsStudentServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DetailsInstructorServlet.class);
     private static final String TEMPLATE_NAME = "manager-instructor-details";
-
     @Inject
     private TemplateProvider templateProvider;
-   @Inject
-   private InstructorDao instructorDao;
+    @Inject
+    private InstructorDao instructorDao;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,10 +39,8 @@ public class DetailsInstructorServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         int id = Integer.parseInt(req.getParameter("id"));
         Instructor instructor = instructorDao.findById(id);
         List<Student> studentList = instructor.getStudents();
@@ -53,13 +49,10 @@ public class DetailsInstructorServlet extends HttpServlet {
         model.put("students", studentList);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         try {
             template.process(model, writer);
         } catch (TemplateException e) {
             e.printStackTrace();
         }
-
-
     }
 }

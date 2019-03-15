@@ -27,7 +27,6 @@ public class CourseListServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(CourseListServlet.class);
     private static final String TEMPLATE_NAME = "manager-courses-list";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -40,17 +39,14 @@ public class CourseListServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
         List<Course> courseList = courseDao.findAll();
-
         model.put("course", courseList);
         model.put("numberRecords", courseList.size());
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         try {
             template.process(model, writer);
         } catch (TemplateException e) {

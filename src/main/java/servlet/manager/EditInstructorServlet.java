@@ -26,7 +26,6 @@ import java.util.Map;
 public class EditInstructorServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(EditInstructorServlet.class);
     private static final String TEMPLATE_NAME = "manager-instructor-edit";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -42,16 +41,13 @@ public class EditInstructorServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Instructor editedInstructor = (Instructor) session.getAttribute("editedInstructor");
         model.put("instructor", editedInstructor);
+
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
-
     }
 
     @Override
@@ -61,12 +57,9 @@ public class EditInstructorServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Instructor editedInstructor = (Instructor) session.getAttribute("editedInstructor");
-
         String email = req.getParameter("email");
         String name = req.getParameter("name");
         String lastName = req.getParameter("lastname");
@@ -101,10 +94,10 @@ public class EditInstructorServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-new-manager");
+            LOG.info("Load template manager-instructor-edit");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-new-manager");
+            LOG.warn("Failed load template manager-instructor-edit");
         }
     }
 

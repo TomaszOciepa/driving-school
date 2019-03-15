@@ -29,9 +29,8 @@ import java.util.Map;
 @WebServlet(urlPatterns = "add-student-to-instructor")
 public class AddStudentToInstructorServlet extends HttpServlet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AddStudentToCourseServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AddStudentToInstructorServlet.class);
     private static final String TEMPLATE_NAME = "manager-instructor-add-student";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -44,18 +43,14 @@ public class AddStudentToInstructorServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Instructor editedInstructor = (Instructor) session.getAttribute("editedInstructor");
         model.put("instructor", editedInstructor);
-
 
         checkWhatStudentsHaveInstructor(model, editedInstructor);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
     }
 
@@ -66,8 +61,6 @@ public class AddStudentToInstructorServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
@@ -78,9 +71,10 @@ public class AddStudentToInstructorServlet extends HttpServlet {
         instructorList.add(editedInstructor);
         newStudent.setInstructors(instructorList);
         studentDao.update(newStudent);
-
         model.put("instructor", editedInstructor);
         model.put("SuccesUpdate", "Added New Student To Instructor");
+
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
     }
 
@@ -110,10 +104,10 @@ public class AddStudentToInstructorServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-student-add-course");
+            LOG.info("Load template manager-instructor-add-student");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-student-add-course");
+            LOG.warn("Failed load template manager-instructor-add-student");
         }
     }
 }

@@ -1,6 +1,5 @@
 package servlet.manager;
 
-import date.dao.ManagerDao;
 import date.model.Manager;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
@@ -29,8 +28,6 @@ public class AccountManagerServlet extends HttpServlet {
     @Inject
     private TemplateProvider templateProvider;
     @Inject
-    private ManagerDao managerDao;
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -39,7 +39,6 @@ public class NewCourseServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
@@ -55,7 +54,6 @@ public class NewCourseServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
         Manager sessionUser = (Manager) session.getAttribute("user");
         model.put("user", sessionUser);
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         String name = req.getParameter("name");
         String dateStart = req.getParameter("dateStart");
@@ -70,18 +68,18 @@ public class NewCourseServlet extends HttpServlet {
         newCourse.setCourseCatrgoryDriveLicense(category);
         newCourse.setCourseNumberHours(hours);
         courseDao.save(newCourse);
-
         model.put("SuccesUpdate", "Added New Course");
-        loadTemplate(writer, model, template);
 
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
+        loadTemplate(writer, model, template);
     }
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-new-instructor");
+            LOG.info("Load template manager-new-course");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-new-instructor");
+            LOG.warn("Failed load template manager-new-course");
         }
     }
 }

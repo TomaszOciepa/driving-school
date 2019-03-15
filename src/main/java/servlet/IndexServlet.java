@@ -35,7 +35,6 @@ public class IndexServlet extends HttpServlet {
         Map<String, Object> model = new HashMap<>();
 
         template = templateProvider.getTemplate(getServletContext(), "index");
-
         try {
             template.process(model, out);
         } catch (TemplateException e) {

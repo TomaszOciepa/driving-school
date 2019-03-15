@@ -41,22 +41,20 @@ public class NewPasswordSaveServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NEW_PASSWORD);
-
         String pass1 = req.getParameter("password");
         String pass2 = req.getParameter("password2");
 
-        if(pass1.equals(pass2)){
+        if (pass1.equals(pass2)) {
 
             managerSession.setManagerPassword(passwordHashing.generateHash(pass1));
             managerDao.update(managerSession);
 
             model.put("SuccesUpdate", "Save new Password");
             loadTemplate(writer, model, template);
-        }else {
+        } else {
             model.put("FailedUpdate", "The passwords are different. Try again");
             loadTemplate(writer, model, template);
         }
@@ -64,10 +62,10 @@ public class NewPasswordSaveServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-my-account-edit");
+            LOG.info("Load template manager-new-password");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-my-account-edit");
+            LOG.warn("Failed load template manager-new-password");
         }
     }
 }

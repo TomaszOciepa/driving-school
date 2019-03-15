@@ -1,9 +1,7 @@
 package servlet.manager;
 
-import date.dao.CourseDao;
 import date.dao.InstructorDao;
 import date.dao.StudentDao;
-import date.model.Course;
 import date.model.Instructor;
 import date.model.Manager;
 import date.model.Student;
@@ -47,19 +45,15 @@ public class AddInstructorToStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Student student = (Student) session.getAttribute("editedStudent");
         model.put("student", student);
 
         checkWhatInstructorsStudentHas(model, student);
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         loadTemplate(writer, model, template);
-
     }
 
     @Override
@@ -89,10 +83,10 @@ public class AddInstructorToStudentServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-student-add-course");
+            LOG.info("Load template manager-student-add-instructor");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-student-add-course");
+            LOG.warn("Failed load template manager-student-add-instructor");
         }
     }
 

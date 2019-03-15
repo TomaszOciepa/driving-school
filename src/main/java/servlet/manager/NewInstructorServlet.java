@@ -30,7 +30,6 @@ import java.util.Map;
 public class NewInstructorServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(NewInstructorServlet.class);
     private static final String TEMPLATE_NAME = "manager-new-instructor";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -52,9 +51,9 @@ public class NewInstructorServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
+
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
     }
@@ -64,12 +63,10 @@ public class NewInstructorServlet extends HttpServlet {
         resp.setContentType("text/html;charset=UTF-8");
         final PrintWriter writer = resp.getWriter();
         Map<String, Object> model = new HashMap<>();
-
         HttpSession session = req.getSession(true);
         Manager sessionUser = (Manager) session.getAttribute("user");
         model.put("user", sessionUser);
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         String email = req.getParameter("email");
 
         if (checkExistsEmail(req.getParameter("email"))) {
@@ -92,7 +89,6 @@ public class NewInstructorServlet extends HttpServlet {
             mail.sendMail(email, password);
             model.put("SuccesUpdate", "Added New Instructor");
             loadTemplate(writer, model, template);
-
         }
 
     }

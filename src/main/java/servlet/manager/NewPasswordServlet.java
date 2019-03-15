@@ -1,7 +1,6 @@
 package servlet.manager;
 
 import authentication.CheckPassword;
-import date.dao.ManagerDao;
 import date.model.Manager;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
@@ -27,11 +26,8 @@ public class NewPasswordServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(NewPasswordServlet.class);
     private static final String TEMPLATE_CHANGE_PASSWORD = "manager-change-password";
     private static final String TEMPLATE_NEW_PASSWORD = "manager-new-password";
-
     @Inject
     private TemplateProvider templateProvider;
-    @Inject
-    private ManagerDao managerDao;
     @Inject
     private CheckPassword checkPassword;
 
@@ -42,7 +38,6 @@ public class NewPasswordServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
@@ -60,10 +55,10 @@ public class NewPasswordServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-my-account-edit");
+            LOG.info("Load NewPasswordServlet");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-my-account-edit");
+            LOG.warn("Failed load NewPasswordServlet");
         }
     }
 }

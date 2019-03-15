@@ -2,7 +2,6 @@ package servlet.manager;
 
 import date.dao.ManagerDao;
 import date.model.Manager;
-import date.model.Student;
 import freemarker.TemplateProvider;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -25,9 +24,8 @@ import java.util.Map;
 @WebServlet(urlPatterns = "managers-list")
 public class ManagersListServlet extends HttpServlet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(StudentsListServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ManagersListServlet.class);
     private static final String TEMPLATE_NAME = "manager-managers-list";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -41,17 +39,13 @@ public class ManagersListServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         List<Manager> managerList = managerDao.findAll();
-
         model.put("manager", managerList);
         model.put("numberRecords", managerList.size());
 
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         try {
             template.process(model, writer);
         } catch (TemplateException e) {

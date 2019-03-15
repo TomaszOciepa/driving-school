@@ -26,7 +26,6 @@ public class EditManagerServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditManagerServlet.class);
     private static final String TEMPLATE_NAME = "manager-manager-edit";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -41,18 +40,14 @@ public class EditManagerServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         int id = Integer.parseInt(req.getParameter("id"));
-
         Manager editedManager = managerDao.findById(id);
-
         session.setAttribute("editedManager", editedManager);
         model.put("manager", editedManager);
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
     }
 
@@ -63,27 +58,23 @@ public class EditManagerServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Manager editedManager = (Manager) session.getAttribute("editedManager");
-
         String email = req.getParameter("email");
         String name = req.getParameter("name");
         String lastName = req.getParameter("lastname");
-
         Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
         if (checkExists.checkManagerExists(email)) {
 
-            if (editedManager.getManagerEmail().equals(email)){
+            if (editedManager.getManagerEmail().equals(email)) {
                 updateManager(editedManager, email, name, lastName);
                 LOG.info("Manager has bean update");
                 model.put("manager", editedManager);
                 model.put("SuccesUpdate", "Manager has bean update");
                 loadTemplate(writer, model, template);
-            }else {
+            } else {
                 LOG.info("Email is already busy");
                 model.put("manager", editedManager);
                 model.put("FailedUpdate", "Email is already busy. Try again.");
@@ -109,10 +100,10 @@ public class EditManagerServlet extends HttpServlet {
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-new-manager");
+            LOG.info("Load template manager-manager-edit");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-new-manager");
+            LOG.warn("Failed load template manager-manager-edit");
         }
     }
 }

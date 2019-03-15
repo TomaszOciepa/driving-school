@@ -1,6 +1,5 @@
 package servlet.manager;
 
-import date.dao.CourseDao;
 import date.dao.StudentDao;
 import date.model.Course;
 import date.model.Manager;
@@ -38,7 +37,6 @@ public class AddStudentToCourseServlet extends HttpServlet {
     @Inject
     private StudentDao studentDao;
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=UTF-8");
@@ -46,16 +44,14 @@ public class AddStudentToCourseServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         Course course = (Course) session.getAttribute("editedCourse");
         model.put("course", course);
 
         checkWhatStudentsHaveCourse(model, course);
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         loadTemplate(writer, model, template);
     }
 
@@ -66,13 +62,10 @@ public class AddStudentToCourseServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
 
         Course course = (Course) session.getAttribute("editedCourse");
-
         int studentId = Integer.parseInt(req.getParameter("student"));
         Student newStudent = studentDao.findById(studentId);
         List<Course> courseList = newStudent.getCourses();
@@ -82,16 +75,17 @@ public class AddStudentToCourseServlet extends HttpServlet {
 
         model.put("course", course);
         model.put("SuccesUpdate", "Added New Student To Course");
-        loadTemplate(writer, model, template);
 
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
+        loadTemplate(writer, model, template);
     }
 
     private void loadTemplate(PrintWriter writer, Map<String, Object> model, Template template) throws IOException {
         try {
-            LOG.info("Load template manager-student-add-course");
+            LOG.info("Load template manager-course-add-student");
             template.process(model, writer);
         } catch (TemplateException e) {
-            LOG.warn("Failed load template manager-student-add-course");
+            LOG.warn("Failed load template manager-course-add-student");
         }
     }
 
@@ -99,17 +93,16 @@ public class AddStudentToCourseServlet extends HttpServlet {
         List<Student> listAllStudents = studentDao.findAll();
         List<Student> listCourseStudents = editedCourse.getStudents();
         List<Student> listStudents = new ArrayList<>();
-
         listStudents.addAll(listAllStudents);
 
-        if(listCourseStudents.size() == 0){
+        if (listCourseStudents.size() == 0) {
             model.put("students", listStudents);
-        }else if (listCourseStudents.size() == listAllStudents.size()){
+        } else if (listCourseStudents.size() == listAllStudents.size()) {
             model.put("info", "All students are enrolled in this course");
-        }else {
+        } else {
             for (int i = 0; i < listCourseStudents.size(); i++) {
                 for (int j = 0; j < listAllStudents.size(); j++) {
-                    if (listCourseStudents.get(i).getStudentId() == listAllStudents.get(j).getStudentId()){
+                    if (listCourseStudents.get(i).getStudentId() == listAllStudents.get(j).getStudentId()) {
                         Student student = listAllStudents.get(j);
                         listStudents.remove(student);
                     }

@@ -31,7 +31,6 @@ public class DetailsStudentServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(DetailsStudentServlet.class);
     private static final String TEMPLATE_NAME = "manager-student-details";
-
     @Inject
     private TemplateProvider templateProvider;
     @Inject
@@ -44,10 +43,8 @@ public class DetailsStudentServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
 
         Map<String, Object> model = new HashMap<>();
-
         Manager managerSession = (Manager) session.getAttribute("user");
         model.put("user", managerSession);
-
         int id = Integer.parseInt(req.getParameter("id"));
         Student editedStudent = studentDao.findById(id);
         List<Course> courseList = editedStudent.getCourses();
@@ -56,8 +53,8 @@ public class DetailsStudentServlet extends HttpServlet {
         model.put("student", editedStudent);
         model.put("course", courseList);
         model.put("instructor", instructorList);
-        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
 
+        Template template = templateProvider.getTemplate(getServletContext(), TEMPLATE_NAME);
         try {
             template.process(model, writer);
         } catch (TemplateException e) {
